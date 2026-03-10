@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>TMH // Workout Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:        #0f0f0f;
+      --surface:   #1a1a1a;
+      --surface2:  #222222;
+      --border:    #2e2e2e;
+      --gold:      #c9a84c;
+      --gold-dim:  #7a6230;
+      --text:      #e8e4dc;
+      --text-dim:  #7a7570;
+      --text-mid:  #b0aa9f;
+      --red:       #c0392b;
+      --green:     #27ae60;
+      --radius:    6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      min-height: 100vh;
+      overscroll-behavior: none;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header .brand {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 3px;
+      color: var(--gold);
+    }
+    header .session-timer {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--text-dim);
+      display: none;
+    }
+    header .session-timer.active { display: block; color: var(--gold); }
+
+    /* ── SCREENS ── */
+    .screen { display: none; padding: 20px; max-width: 480px; margin: 0 auto; }
+    .screen.active { display: block; }
+
+    /* ── SETUP SCREEN ── */
+    .setup-icon {
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 72px;
+      color: var(--gold);
+      letter-spacing: 4px;
+      margin: 30px 0 10px;
+      line-height: 1;
+    }
+    .setup-subtitle {
+      text-align: center;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 40px;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+    .card-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    /* ── WORKOUT SELECTOR ── */
+    .workout-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .workout-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .workout-btn:active { transform: scale(0.96); }
+    .workout-btn.selected {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #0f0f0f;
+    }
+    .workout-btn .wtype {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 2px;
+      display: block;
+    }
+    .workout-btn .wlabel {
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.7;
+      display: block;
+      margin-top: 2px;
+    }
+
+    /* ── CONDITION SELECTOR ── */
+    .condition-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .cond-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--text-mid);
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .cond-btn:active { transform: scale(0.96); }
+    .cond-btn.selected {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(201, 168, 76, 0.08);
+    }
+
+    /* ── INPUTS ── */
+    input[type="text"], input[type="number"], textarea, select {
+      width: 100%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.15s;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--gold);
+    }
+    textarea {
+      resize: none;
+      height: 80px;
+      line-height: 1.5;
+    }
+    select option { background: var(--surface2); }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: var(--radius);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 3px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary {
+      background: var(--gold);
+      color: #0f0f0f;
+    }
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text-mid);
+      border: 1px solid var(--border);
+    }
+    .btn-danger {
+      background: transparent;
+      color: var(--red);
+      border: 1px solid var(--red);
+      font-size: 14px;
+      letter-spacing: 1px;
+      padding: 10px;
+    }
+    .btn + .btn { margin-top: 10px; }
+
+    /* ── LOGGING SCREEN ── */
+    .workout-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .workout-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .workout-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: right;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-header {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 16px;
+      letter-spacing: 3px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin: 24px 0 14px;
+    }
+
+    /* ── EXERCISE ROWS ── */
+    .exercise-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+    .exercise-name {
+      padding: 12px 14px 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: 0.5px;
+    }
+    .exercise-name .ex-tag {
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-left: 8px;
+      font-weight: 400;
+    }
+    .exercise-inputs {
+      display: grid;
+      padding: 0 14px 12px;
+      gap: 8px;
+    }
+    .exercise-inputs.strength { grid-template-columns: 1fr 1fr 1fr; }
+    .exercise-inputs.duration { grid-template-columns: 1fr 1fr; }
+    .exercise-inputs.bodyweight { grid-template-columns: 1fr 1fr; }
+    .ex-input-wrap { display: flex; flex-direction: column; gap: 4px; }
+    .ex-input-label {
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+    .ex-input-wrap input {
+      padding: 8px 10px;
+      font-size: 14px;
+      font-family: 'IBM Plex Mono', monospace;
+      text-align: center;
+    }
+
+    /* failure / notes toggle */
+    .ex-flags {
+      display: flex;
+      gap: 8px;
+      padding: 0 14px 10px;
+      flex-wrap: wrap;
+    }
+    .flag-btn {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .flag-btn.active-failure { border-color: var(--red); color: var(--red); background: rgba(192,57,43,0.08); }
+    .flag-btn.active-pr { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.08); }
+    .flag-btn.active-skip { border-color: var(--text-dim); color: var(--text-dim); background: rgba(122,117,112,0.12); text-decoration: line-through; }
+
+    /* ── ROUNDS TRACKER ── */
+    .rounds-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-top: 1px solid var(--border);
+    }
+    .rounds-label { font-size: 11px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; flex: 1; }
+    .rounds-counter {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .round-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface2);
+      color: var(--text);
+      font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.15s;
+    }
+    .round-btn:active { transform: scale(0.9); }
+    .round-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 20px;
+      color: var(--gold);
+      width: 24px;
+      text-align: center;
+    }
+
+    /* ── OVERALL SESSION NOTE ── */
+    .session-note-wrap { margin-top: 24px; }
+
+    /* ── SUMMARY SCREEN ── */
+    .summary-stamp {
+      text-align: center;
+      margin: 30px 0 24px;
+    }
+    .summary-stamp .done-word {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      letter-spacing: 6px;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .summary-stamp .done-sub {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-key { color: var(--text-dim); font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+    .summary-val { font-family: 'IBM Plex Mono', monospace; color: var(--text); font-size: 13px; }
+    .summary-note-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.6;
+      font-style: italic;
+    }
+
+    /* ── SETTINGS SCREEN ── */
+    .settings-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-label { font-size: 14px; color: var(--text); }
+    .settings-sub { font-size: 11px; color: var(--text-dim); margin-top: 3px; }
+    .settings-action {
+      font-size: 12px;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 6px 12px;
+      border: 1px solid var(--gold-dim);
+      border-radius: var(--radius);
+      background: transparent;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+    .sheet-url-wrap { margin-top: 14px; }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      display: inline-block; margin-right: 6px;
+    }
+    .status-dot.connected { background: var(--green); }
+    .status-dot.disconnected { background: var(--red); }
+    .status-dot.pending { background: var(--gold); }
+
+    /* ── HISTORY SCREEN ── */
+    .history-entry {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+    .history-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .history-type {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 2px;
+      color: var(--gold);
+    }
+    .history-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      text-align: right;
+    }
+    .history-highlights {
+      font-size: 12px;
+      color: var(--text-mid);
+      line-height: 1.6;
+    }
+    .history-note {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-style: italic;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── NAV BAR ── */
+    nav {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex;
+      z-index: 100;
+    }
+    .nav-btn {
+      flex: 1;
+      padding: 12px 0 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      border: none;
+      background: transparent;
+    }
+    .nav-btn:active { background: var(--surface2); }
+    .nav-icon { font-size: 20px; display: block; }
+    .nav-label {
+      font-size: 9px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      display: block;
+      margin-top: 2px;
+    }
+    .nav-btn.active .nav-label { color: var(--gold); }
+    .nav-btn.active .nav-icon { filter: none; }
+
+    /* ── BOTTOM PADDING for nav ── */
+    .screen { padding-bottom: 80px; }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 20px;
+      font-size: 13px;
+      color: var(--text);
+      opacity: 0;
+      transition: all 0.3s;
+      pointer-events: none;
+      white-space: nowrap;
+      z-index: 200;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.success { border-color: var(--green); color: var(--green); }
+    #toast.error { border-color: var(--red); color: var(--red); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-dim);
+    }
+    .empty-state .empty-icon { font-size: 40px; margin-bottom: 14px; }
+    .empty-state p { font-size: 13px; line-height: 1.6; }
+
+    /* ── PROGRESS BAR ── */
+    .progress-wrap { margin-bottom: 20px; }
+    .progress-bar {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: 2px;
+      transition: width 0.3s;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 5px;
+    }
+
+    @media (prefers-color-scheme: light) {
+      /* Keep dark — this is a workout app */
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="brand">TMH // LOG</div>
+  <div class="session-timer" id="sessionTimer">00:00</div>
+</header>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: HOME / WORKOUT SELECT
+═══════════════════════════════════════════ -->
+<div class="screen active" id="screen-home">
+  <div class="setup-icon">TMH</div>
+  <div class="setup-subtitle">Workout Log // To Him Alone Be the Glory</div>
+
+  <div class="card">
+    <div class="card-label">Select Workout</div>
+    <div class="workout-selector">
+      <div class="workout-btn" data-type="LOWER" onclick="selectWorkout(this)">
+        <span class="wtype">▼</span>
+        <span class="wlabel">Lower</span>
+      </div>
+      <div class="workout-btn" data-type="CORE" onclick="selectWorkout(this)">
+        <span class="wtype">◈</span>
+        <span class="wlabel">Core</span>
+      </div>
+      <div class="workout-btn" data-type="UPPER" onclick="selectWorkout(this)">
+        <span class="wtype">▲</span>
+        <span class="wlabel">Upper</span>
+      </div>
+    </div>
+
+    <div class="card-label" style="margin-top:16px;">Body Condition Today</div>
+    <div class="condition-grid" id="conditionGrid">
+      <div class="cond-btn" onclick="selectCondition(this)" data-val="Strong — Ready to push">💪 Strong</div>
+      <div class="cond-btn" onclick="selectCondition(this)" data-val="Solid — Normal session">✅ Solid</div>
+      <div class="cond-btn" onclick="selectCondition(this)" data-val="Moderate — Working through it">⚡ Moderate</div>
+      <div class="cond-btn" onclick="selectCondition(this)" data-val="Low — Autoregulating down">🔻 Low</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Sleep Last Night</div>
+    <div class="condition-grid">
+      <div class="cond-btn" onclick="selectSleep(this)" data-val="Good (7+ hrs, restful)">😴 Good</div>
+      <div class="cond-btn" onclick="selectSleep(this)" data-val="Decent (5–7 hrs)">🌙 Decent</div>
+      <div class="cond-btn" onclick="selectSleep(this)" data-val="Broken (interrupted)">⚡ Broken</div>
+      <div class="cond-btn" onclick="selectSleep(this)" data-val="Short (under 5 hrs)">🔴 Short</div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" onclick="startWorkout()">Begin Session</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: LOGGING
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-log">
+  <div class="workout-header">
+    <div>
+      <div class="workout-title" id="logTitle">LOWER</div>
+      <div style="font-size:11px; color:var(--text-dim); letter-spacing:1px; margin-top:2px;" id="logConditionDisplay"></div>
+    </div>
+    <div class="workout-date" id="logDate"></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label"><span id="progressText">0 of 0 sections</span><span id="elapsedLabel">0:00</span></div>
+  </div>
+
+  <div id="exerciseContainer"></div>
+
+  <div class="session-note-wrap">
+    <div class="section-header">Session Notes</div>
+    <textarea id="sessionNote" placeholder="How'd it go? Joint issues, energy, what felt good or rough…"></textarea>
+  </div>
+
+  <hr class="divider" />
+  <button class="btn btn-primary" onclick="finishWorkout()">Finish & Save</button>
+  <button class="btn btn-danger" onclick="cancelWorkout()">Discard Session</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: SUMMARY
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-summary">
+  <div class="summary-stamp">
+    <div class="done-word">DONE</div>
+    <div class="done-sub" id="summarySubtitle">Lower Body // Today</div>
+  </div>
+
+  <div class="card" id="summaryStats"></div>
+
+  <div class="summary-note-block" id="summaryNote" style="display:none;"></div>
+
+  <hr class="divider" />
+  <div style="font-size:11px; color:var(--text-dim); text-align:center; letter-spacing:1px; margin-bottom:14px; text-transform:uppercase;" id="saveStatus">Saving to Google Sheets…</div>
+  <button class="btn btn-primary" onclick="goHome()">New Session</button>
+  <button class="btn btn-secondary" onclick="showScreen('screen-history')">View History</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: HISTORY
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-history">
+  <div class="section-header" style="margin-top:0;">Recent Sessions</div>
+  <div id="historyList"></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SCREEN: SETTINGS
+═══════════════════════════════════════════ -->
+<div class="screen" id="screen-settings">
+  <div class="section-header" style="margin-top:0;">Configuration</div>
+
+  <div class="card">
+    <div class="card-label">Google Sheets Integration</div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">
+          <span class="status-dot" id="sheetStatusDot"></span>
+          <span id="sheetStatusText">Not configured</span>
+        </div>
+        <div class="settings-sub">Logs save automatically after each session</div>
+      </div>
+    </div>
+    <div class="sheet-url-wrap">
+      <div class="card-label">Apps Script Web App URL</div>
+      <input type="text" id="sheetUrlInput" placeholder="https://script.google.com/macros/s/…/exec" />
+      <div style="margin-top:8px;">
+        <button class="settings-action" onclick="saveSheetUrl()">Save URL</button>
+        <button class="settings-action" style="margin-left:8px;" onclick="testSheetConnection()">Test</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Setup Instructions</div>
+    <ol style="font-size:12px; color:var(--text-mid); line-height:1.9; padding-left:18px;">
+      <li>Open <strong style="color:var(--text);">Google Sheets</strong> — create a new blank sheet</li>
+      <li>Click <strong style="color:var(--text);">Extensions → Apps Script</strong></li>
+      <li>Delete any existing code, paste the script below</li>
+      <li>Click <strong style="color:var(--text);">Deploy → New deployment</strong></li>
+      <li>Type: <strong style="color:var(--text);">Web app</strong></li>
+      <li>Execute as: <strong style="color:var(--text);">Me</strong> · Access: <strong style="color:var(--text);">Anyone</strong></li>
+      <li>Copy the Web App URL and paste it above</li>
+    </ol>
+    <button class="btn btn-secondary" style="margin-top:14px; font-size:14px; letter-spacing:1px;" onclick="copyScript()">Copy Apps Script Code</button>
+  </div>
+
+  <div class="card">
+    <div class="card-label">Data</div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">Export Local History</div>
+        <div class="settings-sub">Download all sessions as JSON</div>
+      </div>
+      <button class="settings-action" onclick="exportData()">Export</button>
+    </div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">Clear Local History</div>
+        <div class="settings-sub">Removes cached sessions from this device</div>
+      </div>
+      <button class="settings-action" style="color:var(--red); border-color:var(--red);" onclick="clearLocal()">Clear</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-label">About</div>
+    <div style="font-size:12px; color:var(--text-dim); line-height:1.8;">
+      Built for Timothy Michael Hurst<br/>
+      <span style="font-style:italic;">Husband · Father · Author · Homesteader</span><br/><br/>
+      <span style="color:var(--gold); font-style:italic;">"To Him alone be the glory."</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     BOTTOM NAV
+═══════════════════════════════════════════ -->
+<nav>
+  <button class="nav-btn active" id="nav-home" onclick="navTo('home')">
+    <span class="nav-icon">⊕</span>
+    <span class="nav-label">Log</span>
+  </button>
+  <button class="nav-btn" id="nav-history" onclick="navTo('history')">
+    <span class="nav-icon">◎</span>
+    <span class="nav-label">History</span>
+  </button>
+  <button class="nav-btn" id="nav-settings" onclick="navTo('settings')">
+    <span class="nav-icon">⚙</span>
+    <span class="nav-label">Settings</span>
+  </button>
+</nav>
+
+<div id="toast"></div>
+
+<!-- ══════════════════════════════════════════
+     APPS SCRIPT CODE (embedded for copy)
+═══════════════════════════════════════════ -->
+<script id="appsScriptCode" type="text/plain">
+function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = JSON.parse(e.postData.contents);
+
+    // Add header row if sheet is empty
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow([
+        'Timestamp', 'Date', 'Workout Type', 'Condition', 'Sleep',
+        'Duration (min)', 'Rounds Completed', 'Exercises Summary', 'Session Note'
+      ]);
+      sheet.getRange(1, 1, 1, 9).setFontWeight('bold');
+    }
+
+    sheet.appendRow([
+      new Date().toISOString(),
+      data.date,
+      data.workoutType,
+      data.condition,
+      data.sleep,
+      data.duration,
+      data.rounds,
+      data.exerciseSummary,
+      data.note
+    ]);
+
+    return ContentService
+      .createTextOutput(JSON.stringify({status: 'ok'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService
+      .createTextOutput(JSON.stringify({status: 'error', message: err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  return ContentService
+    .createTextOutput(JSON.stringify({status: 'ok', message: 'TMH Workout Log connected'}))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+</script>
+
+<!-- ══════════════════════════════════════════
+     WORKOUT TEMPLATES
+═══════════════════════════════════════════ -->
+<script>
+const WORKOUTS = {
+  LOWER: {
+    label: 'Lower Body',
+    sections: [
+      {
+        title: 'Mobility Warm-Up',
+        exercises: [
+          { id: 'stepup', name: 'Step Up / Step Down', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'lateralstep', name: 'Lateral Step Up / Down', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'hopup', name: 'Hop Up / Hop Down', type: 'bodyweight', fields: ['Sets','Reps'] },
+        ]
+      },
+      {
+        title: 'Boxing Footwork',
+        note: '30 sec on / 5 sec rest — both stances',
+        exercises: [
+          { id: 'footwork_post', name: 'Postural / Standing', type: 'duration', fields: ['Rounds','Notes'] },
+          { id: 'footwork_fwd', name: 'Step Forward & Back', type: 'duration', fields: ['Rounds','Notes'] },
+          { id: 'footwork_circ', name: 'Circle In & Out', type: 'duration', fields: ['Rounds','Notes'] },
+          { id: 'footwork_lat', name: 'Lateral Step In & Out', type: 'duration', fields: ['Rounds','Notes'] },
+          { id: 'footwork_side', name: 'Sidestep In & Out (90°)', type: 'duration', fields: ['Rounds','Notes'] },
+        ]
+      },
+      {
+        title: 'Kick Conditioning',
+        exercises: [
+          { id: 'kick_fwd', name: 'Forward Leg Raises', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'kick_back', name: 'Back Leg Raises', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'kick_in', name: 'Inside Leg Raises', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'kick_out', name: 'Outside Leg Raises', type: 'bodyweight', fields: ['Sets','Reps'] },
+        ]
+      },
+      {
+        title: 'Primary Lifts',
+        hasRounds: true,
+        exercises: [
+          { id: 'squat', name: 'Squats', type: 'strength', fields: ['Sets','Reps','Weight (lbs)'] },
+          { id: 'goodmorning', name: 'Good Mornings', type: 'strength', fields: ['Sets','Reps','Weight (lbs)'] },
+          { id: 'toeraise', name: 'Toe Raises', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'bridge', name: 'Bridges', type: 'bodyweight', fields: ['Sets','Reps'] },
+        ]
+      },
+    ]
+  },
+
+  CORE: {
+    label: 'Core',
+    sections: [
+      {
+        title: 'Carry Circuit',
+        note: 'Up to 2 min per carry or to failure',
+        hasRounds: false,
+        exercises: [
+          { id: 'farmer', name: 'Farmer\'s Carry', type: 'strength', fields: ['Duration (sec)','Weight ea. (lbs)'] },
+          { id: 'suitcase', name: 'Suitcase Carry', type: 'strength', fields: ['Duration (sec)','Weight (lbs)'] },
+          { id: 'overhead', name: 'Double Overhead Carry', type: 'strength', fields: ['Duration (sec)','Weight ea. (lbs)'] },
+          { id: 'front', name: 'Double Front Carry', type: 'strength', fields: ['Duration (sec)','Weight (lbs)'] },
+          { id: 'slanted', name: 'Slanted Carry', type: 'strength', fields: ['Duration (sec)','Weight ea. (lbs)'] },
+          { id: 'bucket_suit', name: 'Bucket Suitcase Carry', type: 'duration', fields: ['Duration (sec)','Notes'] },
+          { id: 'bucket_slant', name: 'Bucket Slanted Carry', type: 'duration', fields: ['Duration (sec)','Notes'] },
+        ]
+      },
+      {
+        title: 'Heavy Bag — Waist Power',
+        note: 'Controlled push using waist torsion & breath only',
+        exercises: [
+          { id: 'bag_bow_front', name: 'Bow Stance — Front Hand Push', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'bag_bow_rear', name: 'Bow Stance — Rear Hand Push', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'bag_horse_in', name: 'Horse Stance — Inside Push', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'bag_horse_out', name: 'Horse Stance — Outside Push', type: 'bodyweight', fields: ['Sets','Reps'] },
+        ]
+      },
+      {
+        title: 'Parallettes / Dumbbell Core',
+        hasRounds: true,
+        exercises: [
+          { id: 'legraise', name: 'Parallettes Leg Raises', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'sidebend', name: 'Dumbbell Side Bends', type: 'strength', fields: ['Sets','Reps','Weight (lbs)'] },
+          { id: 'highkick', name: 'Parallettes High Kicks', type: 'bodyweight', fields: ['Sets','Reps'] },
+        ]
+      },
+      {
+        title: 'Bosu / Mat Circuit',
+        exercises: [
+          { id: 'bosu_crunch', name: 'Bosu Crunches', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'bosu_ext', name: 'Weighted Bosu Extensions', type: 'strength', fields: ['Sets','Reps','Weight ea. (lbs)'] },
+        ]
+      },
+      {
+        title: 'Sub-Circuit',
+        hasRounds: true,
+        exercises: [
+          { id: 'hollow', name: 'Hollows', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'sideplank', name: 'Side Plank Ups', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'russtwist', name: 'Dumbbell Russian Twists', type: 'strength', fields: ['Sets','Reps','Weight ea. (lbs)'] },
+        ]
+      },
+    ]
+  },
+
+  UPPER: {
+    label: 'Upper Body',
+    sections: [
+      {
+        title: 'Hand Blocks',
+        note: '20 reps / 4 sets — alternating leads',
+        exercises: [
+          { id: 'block_hiout', name: 'High Outside Brush', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'block_hiin', name: 'High Inside Brush', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'block_midout', name: 'Mid Outside Block', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'block_midin', name: 'Mid Inside Block', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'block_lowout', name: 'Low Outside Block', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'block_rising', name: 'Rising Block', type: 'bodyweight', fields: ['Sets','Reps'] },
+        ]
+      },
+      {
+        title: 'Boxing Combinations',
+        note: '20 reps each side — form first, then loose & snappy',
+        exercises: [
+          { id: 'box_jab', name: 'Jabs', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_backfist', name: 'Backfists', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_cross', name: 'Crosses', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_upfront', name: 'Uppercuts (Front)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_uprear', name: 'Uppercuts (Rear)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_lowrev_f', name: 'Low Reverse (Front)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_lowrev_r', name: 'Low Reverse (Rear)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_hook_f', name: 'Hooks (Front)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_hook_r', name: 'Hooks (Rear)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_hirev_f', name: 'High Reverse (Front)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_hirev_r', name: 'High Reverse (Rear)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'box_overhand', name: 'Overhand Strike (Rear)', type: 'bodyweight', fields: ['Sets','Reps'] },
+        ]
+      },
+      {
+        title: 'Primary Lifting',
+        hasRounds: true,
+        exercises: [
+          { id: 'hangrow', name: 'Hanging Rows (to Pull-up)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'dbrow', name: 'Dumbbell Rows', type: 'strength', fields: ['Sets','Reps','Weight ea. (lbs)'] },
+          { id: 'pushup', name: 'Push-Ups (Parallettes)', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'dbfly', name: 'Dumbbell Flyes', type: 'strength', fields: ['Sets','Reps','Weight ea. (lbs)'] },
+          { id: 'traise', name: 'Dumbbell T-Raises', type: 'strength', fields: ['Sets','Reps','Weight ea. (lbs)'] },
+          { id: 'arnold', name: 'Arnold Press', type: 'strength', fields: ['Sets','Reps','Weight ea. (lbs)'] },
+          { id: 'curl', name: 'Dumbbell Bicep Curls', type: 'strength', fields: ['Sets','Reps','Weight ea. (lbs)'] },
+          { id: 'dips', name: 'Parallettes Dips', type: 'bodyweight', fields: ['Sets','Reps'] },
+          { id: 'triext', name: 'Triceps Extensions (DB)', type: 'strength', fields: ['Sets','Reps','Weight ea. (lbs)'] },
+        ]
+      },
+      {
+        title: 'Shoulder Stability',
+        exercises: [
+          { id: 'introt', name: 'Internal Shoulder Rotation', type: 'strength', fields: ['Sets','Reps','Weight (lbs)'] },
+          { id: 'extrot', name: 'External Shoulder Rotation', type: 'strength', fields: ['Sets','Reps','Weight (lbs)'] },
+          { id: 'yraise', name: 'Bent-Over Trapezius Y-Raises', type: 'strength', fields: ['Sets','Reps','Weight (lbs)'] },
+          { id: 'forecurl', name: 'Forearm Curls', type: 'strength', fields: ['Sets','Reps','Weight (lbs)'] },
+          { id: 'foreflex', name: 'Forearm Flexion', type: 'strength', fields: ['Sets','Reps','Weight (lbs)'] },
+        ]
+      },
+    ]
+  }
+};
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let state = {
+  selectedWorkout: null,
+  selectedCondition: null,
+  selectedSleep: null,
+  sessionStart: null,
+  timerInterval: null,
+  currentSession: null,
+};
+
+// ══════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function navTo(tab) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('nav-' + tab).classList.add('active');
+
+  if (tab === 'home') showScreen('screen-home');
+  else if (tab === 'history') { renderHistory(); showScreen('screen-history'); }
+  else if (tab === 'settings') { initSettings(); showScreen('screen-settings'); }
+}
+
+function goHome() {
+  stopTimer();
+  state = { selectedWorkout: null, selectedCondition: null, selectedSleep: null, sessionStart: null, timerInterval: null, currentSession: null };
+  document.querySelectorAll('.workout-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.cond-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('sessionNote').value = '';
+  navTo('home');
+}
+
+// ══════════════════════════════════════════
+// SELECTORS
+// ══════════════════════════════════════════
+function selectWorkout(el) {
+  document.querySelectorAll('.workout-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedWorkout = el.dataset.type;
+}
+
+function selectCondition(el) {
+  document.querySelectorAll('#conditionGrid .cond-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedCondition = el.dataset.val;
+}
+
+function selectSleep(el) {
+  // find parent card's cond-btns
+  const siblings = el.parentElement.querySelectorAll('.cond-btn');
+  siblings.forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  state.selectedSleep = el.dataset.val;
+}
+
+// ══════════════════════════════════════════
+// TIMER
+// ══════════════════════════════════════════
+function startTimer() {
+  state.sessionStart = Date.now();
+  const el = document.getElementById('sessionTimer');
+  el.classList.add('active');
+  state.timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - state.sessionStart) / 1000);
+    const m = Math.floor(elapsed / 60).toString().padStart(2,'0');
+    const s = (elapsed % 60).toString().padStart(2,'0');
+    el.textContent = m + ':' + s;
+    document.getElementById('elapsedLabel').textContent = m + ':' + s;
+  }, 1000);
+}
+
+function stopTimer() {
+  clearInterval(state.timerInterval);
+  document.getElementById('sessionTimer').classList.remove('active');
+}
+
+function getElapsedMinutes() {
+  if (!state.sessionStart) return 0;
+  return Math.round((Date.now() - state.sessionStart) / 60000);
+}
+
+// ══════════════════════════════════════════
+// BUILD EXERCISE FORM
+// ══════════════════════════════════════════
+function buildExerciseBlock(ex, sectionIdx, exIdx) {
+  const typeMap = { strength: 'strength', duration: 'duration', bodyweight: 'bodyweight' };
+  const gridClass = ex.fields.length === 3 ? 'strength' : ex.fields.length === 2 ? 'bodyweight' : 'duration';
+
+  const fields = ex.fields.map((f, i) => `
+    <div class="ex-input-wrap">
+      <div class="ex-input-label">${f}</div>
+      <input type="number" inputmode="numeric" placeholder="—"
+        id="ex_${ex.id}_f${i}"
+        onchange="updateProgress()" />
+    </div>
+  `).join('');
+
+  return `
+    <div class="exercise-block" id="block_${ex.id}">
+      <div class="exercise-name">${ex.name}
+        <span class="ex-tag">${ex.type}</span>
+      </div>
+      <div class="exercise-inputs ${gridClass}">${fields}</div>
+      <div class="ex-flags">
+        <button class="flag-btn" onclick="toggleFlag(this,'active-failure')" title="Hit failure">✗ Failure</button>
+        <button class="flag-btn" onclick="toggleFlag(this,'active-pr')" title="Personal record">★ PR</button>
+        <button class="flag-btn" onclick="toggleFlag(this,'active-skip')" title="Skipped">○ Skip</button>
+      </div>
+    </div>
+  `;
+}
+
+function toggleFlag(btn, cls) {
+  if (btn.classList.contains(cls)) {
+    btn.classList.remove(cls);
+  } else {
+    btn.classList.remove('active-failure','active-pr','active-skip');
+    btn.classList.add(cls);
+  }
+}
+
+function buildWorkoutForm(type) {
+  const workout = WORKOUTS[type];
+  let html = '';
+  let totalSections = workout.sections.length;
+
+  workout.sections.forEach((section, si) => {
+    html += `<div class="section-header">${section.title}</div>`;
+    if (section.note) html += `<div style="font-size:11px; color:var(--text-dim); margin:-8px 0 12px; letter-spacing:0.5px; font-style:italic;">${section.note}</div>`;
+
+    section.exercises.forEach((ex, ei) => {
+      html += buildExerciseBlock(ex, si, ei);
+    });
+
+    if (section.hasRounds) {
+      html += `
+        <div class="exercise-block">
+          <div class="rounds-row">
+            <div class="rounds-label">Rounds Completed</div>
+            <div class="rounds-counter">
+              <button class="round-btn" onclick="adjustRounds('${section.title}', -1)">−</button>
+              <div class="round-num" id="rounds_${si}">1</div>
+              <button class="round-btn" onclick="adjustRounds('${section.title}', 1)">+</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+  });
+
+  return html;
+}
+
+function adjustRounds(sectionTitle, delta) {
+  // find the rounds element for this section
+  const workout = WORKOUTS[state.selectedWorkout];
+  workout.sections.forEach((s, si) => {
+    if (s.title === sectionTitle && s.hasRounds) {
+      const el = document.getElementById('rounds_' + si);
+      if (el) {
+        const current = parseInt(el.textContent) || 1;
+        const next = Math.max(0, Math.min(5, current + delta));
+        el.textContent = next;
+      }
+    }
+  });
+}
+
+function updateProgress() {
+  const workout = WORKOUTS[state.selectedWorkout];
+  if (!workout) return;
+  let filled = 0, total = 0;
+  workout.sections.forEach(s => {
+    s.exercises.forEach(ex => {
+      ex.fields.forEach((f, i) => {
+        const el = document.getElementById(`ex_${ex.id}_f${i}`);
+        if (el) { total++; if (el.value.trim()) filled++; }
+      });
+    });
+  });
+  const pct = total > 0 ? Math.round((filled / total) * 100) : 0;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = pct + '% logged';
+}
+
+// ══════════════════════════════════════════
+// START / FINISH
+// ══════════════════════════════════════════
+function startWorkout() {
+  if (!state.selectedWorkout) { showToast('Select a workout type', 'error'); return; }
+  if (!state.selectedCondition) { showToast('Select your condition today', 'error'); return; }
+  if (!state.selectedSleep) { showToast('Select sleep quality', 'error'); return; }
+
+  const workout = WORKOUTS[state.selectedWorkout];
+  document.getElementById('logTitle').textContent = state.selectedWorkout;
+  document.getElementById('logConditionDisplay').textContent =
+    state.selectedCondition + ' · ' + state.selectedSleep;
+
+  const now = new Date();
+  document.getElementById('logDate').innerHTML =
+    now.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) +
+    '<br/>' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+  document.getElementById('exerciseContainer').innerHTML =
+    buildWorkoutForm(state.selectedWorkout);
+
+  document.getElementById('progressText').textContent = '0% logged';
+  document.getElementById('progressFill').style.width = '0%';
+
+  startTimer();
+  showScreen('screen-log');
+  document.getElementById('nav-home').classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function collectSessionData() {
+  const workout = WORKOUTS[state.selectedWorkout];
+  const exercises = [];
+  let prCount = 0, failureCount = 0, skipCount = 0;
+
+  workout.sections.forEach((section, si) => {
+    section.exercises.forEach(ex => {
+      const entry = { name: ex.name, type: ex.type, fields: {} };
+      ex.fields.forEach((f, i) => {
+        const el = document.getElementById(`ex_${ex.id}_f${i}`);
+        if (el && el.value) entry.fields[f] = el.value;
+      });
+      // flags
+      const block = document.getElementById('block_' + ex.id);
+      if (block) {
+        const failBtn = block.querySelector('.flag-btn.active-failure');
+        const prBtn = block.querySelector('.flag-btn.active-pr');
+        const skipBtn = block.querySelector('.flag-btn.active-skip');
+        if (failBtn) { entry.flag = 'failure'; failureCount++; }
+        if (prBtn) { entry.flag = 'pr'; prCount++; }
+        if (skipBtn) { entry.flag = 'skip'; skipCount++; }
+      }
+      exercises.push(entry);
+    });
+
+    if (section.hasRounds) {
+      const roundEl = document.getElementById('rounds_' + si);
+      if (roundEl) {
+        exercises.push({ name: section.title + ' — Rounds', type: 'meta', value: roundEl.textContent });
+      }
+    }
+  });
+
+  // Build summary string for Sheets
+  const strengthEntries = exercises
+    .filter(e => e.type === 'strength' && e.fields['Weight ea. (lbs)'] || e.fields['Weight (lbs)'])
+    .map(e => {
+      const w = e.fields['Weight ea. (lbs)'] || e.fields['Weight (lbs)'] || '';
+      const r = e.fields['Reps'] || '';
+      return `${e.name}: ${r}r @ ${w}lbs`;
+    }).join(' | ');
+
+  return {
+    date: new Date().toLocaleDateString('en-US'),
+    workoutType: state.selectedWorkout,
+    condition: state.selectedCondition,
+    sleep: state.selectedSleep,
+    duration: getElapsedMinutes(),
+    rounds: exercises.filter(e => e.type === 'meta').map(e => e.value).join(', ') || '—',
+    exerciseSummary: strengthEntries || 'Bodyweight session',
+    note: document.getElementById('sessionNote').value.trim(),
+    exercises: exercises,
+    prCount, failureCount, skipCount,
+  };
+}
+
+function finishWorkout() {
+  stopTimer();
+  state.currentSession = collectSessionData();
+
+  // render summary
+  renderSummary(state.currentSession);
+  showScreen('screen-summary');
+
+  // save locally
+  saveLocally(state.currentSession);
+
+  // push to sheets
+  pushToSheets(state.currentSession);
+
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+}
+
+function cancelWorkout() {
+  if (confirm('Discard this session?')) {
+    stopTimer();
+    goHome();
+  }
+}
+
+// ══════════════════════════════════════════
+// SUMMARY RENDER
+// ══════════════════════════════════════════
+function renderSummary(session) {
+  document.getElementById('summarySubtitle').textContent =
+    session.workoutType + ' // ' + session.date;
+
+  const stats = document.getElementById('summaryStats');
+  stats.innerHTML = `
+    <div class="summary-row">
+      <span class="summary-key">Duration</span>
+      <span class="summary-val">${session.duration} min</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Condition</span>
+      <span class="summary-val">${session.condition.split('—')[0].trim()}</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Sleep</span>
+      <span class="summary-val">${session.sleep.split('(')[0].trim()}</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">PRs</span>
+      <span class="summary-val" style="color:var(--gold)">${session.prCount || '—'}</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Failures Hit</span>
+      <span class="summary-val">${session.failureCount || '—'}</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Exercises Skipped</span>
+      <span class="summary-val">${session.skipCount || '—'}</span>
+    </div>
+  `;
+
+  const noteEl = document.getElementById('summaryNote');
+  if (session.note) {
+    noteEl.textContent = '"' + session.note + '"';
+    noteEl.style.display = 'block';
+  } else {
+    noteEl.style.display = 'none';
+  }
+}
+
+// ══════════════════════════════════════════
+// PERSISTENCE
+// ══════════════════════════════════════════
+function saveLocally(session) {
+  const history = getLocalHistory();
+  history.unshift({ ...session, savedAt: new Date().toISOString() });
+  // keep last 60 sessions
+  const trimmed = history.slice(0, 60);
+  try {
+    localStorage.setItem('tmh_workout_history', JSON.stringify(trimmed));
+  } catch(e) {
+    console.warn('Storage full, trimming further');
+    localStorage.setItem('tmh_workout_history', JSON.stringify(trimmed.slice(0,30)));
+  }
+}
+
+function getLocalHistory() {
+  try {
+    return JSON.parse(localStorage.getItem('tmh_workout_history') || '[]');
+  } catch(e) { return []; }
+}
+
+// ══════════════════════════════════════════
+// GOOGLE SHEETS PUSH
+// ══════════════════════════════════════════
+async function pushToSheets(session) {
+  const url = localStorage.getItem('tmh_sheet_url');
+  const statusEl = document.getElementById('saveStatus');
+
+  if (!url) {
+    if (statusEl) statusEl.textContent = 'Saved locally · Configure Sheets in Settings';
+    return;
+  }
+
+  try {
+    const payload = {
+      date: session.date,
+      workoutType: session.workoutType,
+      condition: session.condition,
+      sleep: session.sleep,
+      duration: session.duration,
+      rounds: session.rounds,
+      exerciseSummary: session.exerciseSummary,
+      note: session.note,
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (statusEl) {
+      statusEl.textContent = '✓ Saved to Google Sheets';
+      statusEl.style.color = 'var(--green)';
+    }
+    showToast('Saved to Sheets ✓', 'success');
+  } catch(err) {
+    if (statusEl) {
+      statusEl.textContent = 'Sheets save failed · Stored locally';
+      statusEl.style.color = 'var(--red)';
+    }
+    showToast('Sheets unavailable — saved locally', 'error');
+  }
+}
+
+// ══════════════════════════════════════════
+// HISTORY RENDER
+// ══════════════════════════════════════════
+function renderHistory() {
+  const history = getLocalHistory();
+  const el = document.getElementById('historyList');
+
+  if (!history.length) {
+    el.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">◎</div>
+        <p>No sessions logged yet.<br/>Complete your first workout to see it here.</p>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = history.map(s => `
+    <div class="history-entry">
+      <div class="history-meta">
+        <div class="history-type">${s.workoutType}</div>
+        <div class="history-date">${s.date}<br/>${s.duration || '?'} min</div>
+      </div>
+      <div class="history-highlights">
+        ${s.condition ? s.condition.split('—')[0].trim() : ''} ·
+        ${s.sleep ? s.sleep.split('(')[0].trim() : ''}
+        ${s.prCount > 0 ? ' · <span style="color:var(--gold)">★ ' + s.prCount + ' PR</span>' : ''}
+      </div>
+      ${s.note ? `<div class="history-note">"${s.note}"</div>` : ''}
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════
+function initSettings() {
+  const url = localStorage.getItem('tmh_sheet_url') || '';
+  document.getElementById('sheetUrlInput').value = url;
+  updateSheetStatus(url ? 'connected' : 'disconnected');
+}
+
+function updateSheetStatus(status) {
+  const dot = document.getElementById('sheetStatusDot');
+  const text = document.getElementById('sheetStatusText');
+  dot.className = 'status-dot ' + status;
+  if (status === 'connected') text.textContent = 'Connected to Google Sheets';
+  else if (status === 'pending') text.textContent = 'Testing connection…';
+  else text.textContent = 'Not configured';
+}
+
+function saveSheetUrl() {
+  const url = document.getElementById('sheetUrlInput').value.trim();
+  if (!url) { showToast('Enter a URL first', 'error'); return; }
+  localStorage.setItem('tmh_sheet_url', url);
+  updateSheetStatus('connected');
+  showToast('URL saved ✓', 'success');
+}
+
+async function testSheetConnection() {
+  const url = document.getElementById('sheetUrlInput').value.trim();
+  if (!url) { showToast('Enter a URL first', 'error'); return; }
+  updateSheetStatus('pending');
+  try {
+    await fetch(url, { mode: 'no-cors' });
+    updateSheetStatus('connected');
+    showToast('Connection looks good ✓', 'success');
+  } catch(e) {
+    updateSheetStatus('disconnected');
+    showToast('Could not reach URL', 'error');
+  }
+}
+
+function copyScript() {
+  const code = document.getElementById('appsScriptCode').textContent.trim();
+  navigator.clipboard.writeText(code).then(() => {
+    showToast('Script copied to clipboard ✓', 'success');
+  }).catch(() => {
+    showToast('Copy failed — try long-pressing the script area', 'error');
+  });
+}
+
+function exportData() {
+  const history = getLocalHistory();
+  const blob = new Blob([JSON.stringify(history, null, 2)], {type: 'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'tmh-workout-log-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Export downloaded ✓', 'success');
+}
+
+function clearLocal() {
+  if (confirm('Clear all local session history? This cannot be undone.')) {
+    localStorage.removeItem('tmh_workout_history');
+    showToast('Local history cleared', 'success');
+  }
+}
+
+// ══════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════
+let toastTimeout;
+function showToast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => { el.className = ''; }, 3000);
+}
+</script>
+</body>
+</html>
