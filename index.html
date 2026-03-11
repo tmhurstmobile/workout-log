@@ -1315,7 +1315,7 @@ function buildSetRowHTML(ex, uid, setNum) {
 // ══════════════════════════════════════════
 // SET / ROUND INTERACTIONS
 // ══════════════════════════════════════════
-const setCounters = {}; // uid -> current set count
+let setCounters = {}; // uid -> current set count
 
 function addSet(uid, exId, sectionId, roundNum) {
   if (!setCounters[uid]) setCounters[uid] = 1;
@@ -1337,7 +1337,7 @@ function addSet(uid, exId, sectionId, roundNum) {
   container.appendChild(div.firstElementChild);
 }
 
-const roundCounters = {}; // sectionId -> current round count
+let roundCounters = {}; // sectionId -> current round count
 
 function addRound(sectionId) {
   if (!roundCounters[sectionId]) roundCounters[sectionId] = 1;
