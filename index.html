@@ -24,6 +24,8 @@
       --red:       #c0392b;
       --red-bg:    rgba(192,57,43,0.08);
       --green:     #27ae60;
+      --blue:      #2980b9;
+      --blue-bg:   rgba(41,128,185,0.08);
       --radius:    6px;
       --sidebar-w: 110px;
     }
@@ -102,7 +104,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
     .workout-btn {
       background: var(--surface2);
@@ -117,6 +119,28 @@
     .workout-btn.selected { background: var(--gold); border-color: var(--gold); color: #0f0f0f; }
     .workout-btn .wtype { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; display: block; }
     .workout-btn .wlabel { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; opacity: 0.7; display: block; margin-top: 2px; }
+
+    /* ── MOBILITY BUTTON ── */
+    .mobility-btn {
+      background: var(--surface2);
+      border: 1px dashed var(--gold-dim);
+      border-radius: var(--radius);
+      padding: 14px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .mobility-btn:active { transform: scale(0.98); }
+    .mobility-btn.selected { background: var(--gold-bg); border-color: var(--gold); border-style: solid; }
+    .mobility-btn.selected .wtype { color: var(--gold); }
+    .mobility-btn .wtype { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; color: var(--text-mid); }
+    .mobility-btn .wlabel { font-size: 9px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-dim); }
 
     /* ── CONDITION SELECTOR ── */
     .condition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -172,6 +196,113 @@
     .btn-danger { background: transparent; color: var(--red); border: 1px solid var(--red); font-size: 15px; letter-spacing: 1px; padding: 12px; }
     .btn + .btn { margin-top: 10px; }
 
+    /* ── CHECKLIST SECTIONS ── */
+    .checklist-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.12s;
+      gap: 12px;
+    }
+    .checklist-item:last-child { border-bottom: none; }
+    .checklist-item:active { background: var(--surface2); }
+    .checklist-item.checked { opacity: 0.45; }
+    .checklist-item.checked .checklist-label { text-decoration: line-through; color: var(--text-dim); }
+    .checklist-label {
+      font-size: 13px;
+      color: var(--text-mid);
+      line-height: 1.4;
+      flex: 1;
+    }
+    .checklist-label .checklist-sub {
+      display: block;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+      font-style: italic;
+    }
+    .checklist-check {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      color: var(--gold);
+      flex-shrink: 0;
+      transition: all 0.12s;
+    }
+    .checklist-item.checked .checklist-check {
+      background: var(--gold);
+      color: #0f0f0f;
+      border-color: var(--gold);
+    }
+    .checklist-progress {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      background: var(--surface2);
+      border-bottom: 1px solid var(--border);
+      text-align: right;
+    }
+
+    /* ── SKIP WARM-UP BUTTON ── */
+    .skip-warmup-wrap {
+      margin-bottom: 12px;
+    }
+    .skip-warmup-btn {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--blue-bg);
+      border: 1px dashed var(--blue);
+      border-radius: var(--radius);
+      color: var(--blue);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: center;
+    }
+    .skip-warmup-btn:active { transform: scale(0.98); }
+    .skip-warmup-btn.skipped {
+      background: rgba(41,128,185,0.15);
+      border-style: solid;
+      color: var(--blue);
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    /* ── AUTOREGULATION NOTE ── */
+    .autoreg-note {
+      background: var(--red-bg);
+      border: 1px solid rgba(192,57,43,0.25);
+      border-left: 3px solid var(--red);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      font-size: 11px;
+      color: var(--text-mid);
+      font-style: italic;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
     /* ── LOGGING SCREEN LAYOUT ── */
     #screen-log {
       position: relative;
@@ -182,8 +313,8 @@
     .section-sidebar {
       position: fixed;
       right: 0;
-      top: 57px; /* below header */
-      bottom: 60px; /* above nav */
+      top: 57px;
+      bottom: 60px;
       width: var(--sidebar-w);
       background: var(--surface);
       border-left: 1px solid var(--border);
@@ -294,7 +425,7 @@
     .done-btn:active { transform: scale(0.95); }
     .done-btn.confirmed { border-color: var(--gold-dim); color: var(--gold-dim); }
 
-    /* ── COMPLETION CHECKBOX (Type B sections) ── */
+    /* ── COMPLETION CHECKBOX ── */
     .completion-block {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -669,7 +800,7 @@
   <div style="font-size:10px; letter-spacing:1px; color:var(--text-dim); text-transform:uppercase;">Workout Log</div>
 </header>
 
-<!-- SECTION SIDEBAR (shown during logging) -->
+<!-- SECTION SIDEBAR -->
 <div class="section-sidebar" id="sectionSidebar"></div>
 
 <!-- ══ HOME SCREEN ══ -->
@@ -678,7 +809,7 @@
   <div class="setup-subtitle">Workout Log // To Him Alone Be the Glory</div>
 
   <div class="card">
-    <div class="card-label">Select Workout</div>
+    <div class="card-label">Select Session</div>
     <div class="workout-selector">
       <div class="workout-btn" data-type="LOWER" onclick="selectWorkout(this)">
         <span class="wtype">▼</span>
@@ -692,6 +823,10 @@
         <span class="wtype">▲</span>
         <span class="wlabel">Upper</span>
       </div>
+    </div>
+    <div class="mobility-btn" data-type="MOBILITY" onclick="selectWorkout(this)">
+      <span class="wtype">☽</span>
+      <span class="wlabel">Daily Mobility Sequence</span>
     </div>
 
     <div class="card-label" style="margin-top:16px;">Body Condition Today</div>
@@ -859,7 +994,7 @@ function doPost(e) {
     if (sheet.getLastRow() === 0) {
       sheet.appendRow([
         'Date','Workout','Condition','Sleep','Duration (min)',
-        'Sections Done','Exercise Log','Session Note','Saved At'
+        'Sections Done','Warmup Skipped','Exercise Log','Session Note','Saved At'
       ]);
     }
 
@@ -870,6 +1005,7 @@ function doPost(e) {
       data.sleep,
       data.duration,
       data.sectionsDone,
+      data.warmupSkipped ? 'YES' : 'NO',
       data.exerciseLog,
       data.note,
       new Date().toISOString()
@@ -898,26 +1034,51 @@ function doGet(e) {
 // ══════════════════════════════════════════
 // Section types:
 //   'performance' = full logging (sets/reps/weight)
-//   'completion'  = single checkbox (Fitbit covers it)
+//   'completion'  = single checkbox
+//   'rewarmup'    = targeted re-warm-up with skip button
+//   'cooldown'    = Section 5 post-lifting flow (completion)
 // Exercise types: 'strength', 'bodyweight', 'duration'
 // Goal: { reps, weight } for strength; { reps } for bodyweight; { mins, secs } for duration
 
 const WORKOUTS = {
+
+  // ── LOWER BODY ──────────────────────────────────────────────────────
   LOWER: {
     label: 'Lower Body',
     sections: [
       {
-        id: 'lower_warmup',
-        title: 'Mobility Warm-Up',
-        type: 'completion',
-        label: 'Warm-Up Complete'
+        id: 'lower_rewarmup',
+        title: 'Re-Warm-Up',
+        type: 'rewarmup',
+        note: 'Skip if going straight from Daily Mobility Session',
+        exercises: [
+          { id: 'rw_lower_heelsquat', name: 'Heel-Elevated Bodyweight Squat', type: 'bodyweight', goal: { reps: 10 } },
+          { id: 'rw_lower_clam',      name: 'Clamshells',                     type: 'strength',   goal: { reps: 15, weight: 0 } },
+          { id: 'rw_lower_bosu',      name: 'Bosu Balance Hold',              type: 'duration',   goal: { mins: 0, secs: 20 } },
+        ]
+      },
+      {
+        id: 'lower_corrective',
+        title: 'Corrective Chain',
+        type: 'performance',
+        note: 'Right knee / ankle / hip sequence — do not skip',
+        exercises: [
+          { id: 'cc_toecircle',   name: 'Toe Circles (Left Foot)',          type: 'duration',   goal: { mins: 0, secs: 40 } },
+          { id: 'cc_anklecirc',   name: 'Ankle Circles (Both Feet)',        type: 'duration',   goal: { mins: 0, secs: 40 } },
+          { id: 'cc_wallankle',   name: 'Wall Ankle Stretch (Knee-to-Wall)', type: 'duration',   goal: { mins: 0, secs: 30 } },
+          { id: 'cc_figfour',     name: 'Supine Figure-Four Stretch',       type: 'duration',   goal: { mins: 1, secs: 30 } },
+          { id: 'cc_hipflex',     name: 'Kneeling Hip Flexor Stretch',      type: 'duration',   goal: { mins: 1, secs: 30 } },
+          { id: 'cc_clam',        name: 'Clamshells',                       type: 'strength',   goal: { reps: 15, weight: 0 } },
+          { id: 'cc_bosu',        name: 'Bosu Balance Hold',                type: 'duration',   goal: { mins: 0, secs: 20 } },
+          { id: 'cc_heelsquat',   name: 'Heel-Elevated Bodyweight Squat',   type: 'bodyweight', goal: { reps: 10 } },
+        ]
       },
       {
         id: 'lower_footwork',
         title: 'Boxing Footwork',
         type: 'completion',
         label: 'Boxing Footwork Complete',
-        note: '30 sec on / 5 sec rest — both stances'
+        note: '30 sec on / 5 sec rest — both stances, 5 patterns'
       },
       {
         id: 'lower_kick',
@@ -935,31 +1096,46 @@ const WORKOUTS = {
         title: 'Primary Lifts',
         type: 'performance',
         hasRounds: true,
+        note: 'Up to 3 rounds — autoregulate on poor sleep or joint days',
         exercises: [
-          { id: 'squat',       name: 'Squats',       type: 'strength',   goal: { reps: 12, weight: 45 } },
-          { id: 'goodmorning', name: 'Good Mornings', type: 'strength',   goal: { reps: 12, weight: 45 } },
-          { id: 'toeraise',    name: 'Toe Raises',    type: 'bodyweight', goal: { reps: 20 } },
-          { id: 'bridge',      name: 'Bridges',       type: 'bodyweight', goal: { reps: 20 } },
+          { id: 'squat',       name: 'Heel-Elevated Squats',    type: 'strength',   goal: { reps: 12, weight: 45 } },
+          { id: 'goodmorning', name: 'Good Mornings',           type: 'strength',   goal: { reps: 12, weight: 45 } },
+          { id: 'heelraise',   name: 'Platform Heel Raises',    type: 'strength',   goal: { reps: 20, weight: 0  } },
+          { id: 'bridge',      name: 'Bridges',                 type: 'strength',   goal: { reps: 20, weight: 0  } },
         ]
       },
       {
-        id: 'lower_stretch',
-        title: 'Stretching',
-        type: 'completion',
-        label: 'Stretching Complete (~30 min)'
+        id: 'lower_cooldown',
+        title: 'Section 5 Cool-Down',
+        type: 'checklist',
+        note: 'Dynamic only — one breath per transition, no static holds',
+        items: [
+          { id: 'lcd_sun',      label: 'Sun Salutation — Dynamic Pass',         sub: 'Full sequence, one breath per transition' },
+          { id: 'lcd_warrior',  label: 'Warrior 2 — Each Side',                sub: '3 breaths only per side' },
+          { id: 'lcd_knees',    label: 'Both Knees to Chest',                   sub: '3 breaths' },
+          { id: 'lcd_crossrot', label: 'Single Knee Cross-Body Rotation',      sub: '3 breaths each side' },
+          { id: 'lcd_seatfwd',  label: 'Seated Forward Bend',                  sub: 'Hands to ankles — 3 breaths' },
+          { id: 'lcd_butter',   label: 'Butterfly',                            sub: '3 breaths' },
+          { id: 'lcd_wheel',    label: 'Yoga Wheel Thoracic Extension',        sub: 'One pass — 5 breaths' },
+        ]
       },
     ]
   },
 
+  // ── CORE ─────────────────────────────────────────────────────────────
   CORE: {
     label: 'Core',
     sections: [
       {
-        id: 'core_warmup',
-        title: 'Walking Warm-Up',
-        type: 'completion',
-        label: 'Walking Warm-Up Complete',
-        note: 'Dan Tian breathing sequence'
+        id: 'core_rewarmup',
+        title: 'Re-Warm-Up',
+        type: 'rewarmup',
+        note: 'Skip if going straight from Daily Mobility Session',
+        exercises: [
+          { id: 'rw_core_carry',   name: 'Light Farmer\'s Carry',   type: 'duration', goal: { mins: 1, secs: 0 } },
+          { id: 'rw_core_hipcir',  name: 'Hip Circles',             type: 'duration', goal: { mins: 0, secs: 30 } },
+          { id: 'rw_core_dantian', name: 'Dan Tian Breathing Walk', type: 'duration', goal: { mins: 2, secs: 0 } },
+        ]
       },
       {
         id: 'core_carries',
@@ -967,13 +1143,13 @@ const WORKOUTS = {
         type: 'performance',
         note: 'Up to 2 min per carry or to failure',
         exercises: [
-          { id: 'farmer',      name: "Farmer's Carry",         type: 'duration',   goal: { mins: 2, secs: 0 } },
-          { id: 'suitcase',    name: 'Suitcase Carry',          type: 'duration',   goal: { mins: 2, secs: 0 } },
-          { id: 'overhead',    name: 'Double Overhead Carry',   type: 'duration',   goal: { mins: 2, secs: 0 } },
-          { id: 'front',       name: 'Double Front Carry',      type: 'duration',   goal: { mins: 2, secs: 0 } },
-          { id: 'slanted',     name: 'Slanted Carry',           type: 'duration',   goal: { mins: 2, secs: 0 } },
-          { id: 'bucket_suit', name: 'Bucket Suitcase Carry',   type: 'duration',   goal: { mins: 2, secs: 0 } },
-          { id: 'bucket_slant',name: 'Bucket Slanted Carry',    type: 'duration',   goal: { mins: 2, secs: 0 } },
+          { id: 'farmer',       name: "Farmer's Carry",        type: 'duration', goal: { mins: 2, secs: 0 } },
+          { id: 'suitcase',     name: 'Suitcase Carry',         type: 'duration', goal: { mins: 2, secs: 0 } },
+          { id: 'overhead',     name: 'Double Overhead Carry',  type: 'duration', goal: { mins: 2, secs: 0 } },
+          { id: 'front',        name: 'Double Front Carry',     type: 'duration', goal: { mins: 2, secs: 0 } },
+          { id: 'slanted',      name: 'Slanted Carry',          type: 'duration', goal: { mins: 2, secs: 0 } },
+          { id: 'bucket_suit',  name: 'Bucket Suitcase Carry',  type: 'duration', goal: { mins: 2, secs: 0 } },
+          { id: 'bucket_slant', name: 'Bucket Slanted Carry',   type: 'duration', goal: { mins: 2, secs: 0 } },
         ]
       },
       {
@@ -981,17 +1157,18 @@ const WORKOUTS = {
         title: 'Heavy Bag — Waist Power',
         type: 'completion',
         label: 'Heavy Bag Circuit Complete',
-        note: 'Controlled push using waist torsion & breath only'
+        note: 'Bow and horse stance pushes — waist torsion & breath only'
       },
       {
         id: 'core_parallettes',
         title: 'Parallettes / Dumbbell Core',
         type: 'performance',
         hasRounds: true,
+        note: 'Up to 3 rounds',
         exercises: [
-          { id: 'legraise', name: 'Parallettes Leg Raises', type: 'bodyweight', goal: { reps: 20 } },
+          { id: 'legraise', name: 'Parallettes Leg Raises', type: 'strength',   goal: { reps: 20, weight: 0 } },
           { id: 'sidebend', name: 'Dumbbell Side Bends',    type: 'strength',   goal: { reps: 12, weight: 30 } },
-          { id: 'highkick', name: 'Parallettes High Kicks', type: 'bodyweight', goal: { reps: 20 } },
+          { id: 'highkick', name: 'Parallettes High Kicks', type: 'strength',   goal: { reps: 20, weight: 0 } },
         ]
       },
       {
@@ -999,8 +1176,8 @@ const WORKOUTS = {
         title: 'Bosu / Mat Circuit',
         type: 'performance',
         exercises: [
-          { id: 'bosu_crunch', name: 'Bosu Crunches',           type: 'bodyweight', goal: { reps: 20 } },
-          { id: 'bosu_ext',    name: 'Weighted Bosu Extensions', type: 'strength',   goal: { reps: 20, weight: 15 } },
+          { id: 'bosu_crunch', name: 'Bosu Crunches',            type: 'bodyweight', goal: { reps: 20 } },
+          { id: 'bosu_ext',    name: 'Weighted Bosu Extensions',  type: 'strength',   goal: { reps: 20, weight: 15 } },
         ]
       },
       {
@@ -1008,24 +1185,47 @@ const WORKOUTS = {
         title: 'Sub-Circuit',
         type: 'performance',
         hasRounds: true,
+        note: 'Up to 3 rounds',
         exercises: [
-          { id: 'hollow',   name: 'Hollows',                 type: 'bodyweight', goal: { reps: 12 } },
-          { id: 'sideplank',name: 'Side Plank Ups',          type: 'bodyweight', goal: { reps: 12 } },
-          { id: 'russtwist',name: 'Dumbbell Russian Twists', type: 'strength',   goal: { reps: 30, weight: 15 } },
+          { id: 'hollow',    name: 'Hollows',                 type: 'bodyweight', goal: { reps: 12 } },
+          { id: 'sideplank', name: 'Side Plank Ups',          type: 'bodyweight', goal: { reps: 12 } },
+          { id: 'russtwist', name: 'Dumbbell Russian Twists', type: 'strength',   goal: { reps: 30, weight: 15 } },
         ]
       },
       {
-        id: 'core_stretch',
-        title: 'Stretching',
-        type: 'completion',
-        label: 'Stretching Complete (~20–30 min)'
+        id: 'core_cooldown',
+        title: 'Section 5 Cool-Down',
+        type: 'checklist',
+        note: 'Dynamic only — one breath per transition, no static holds',
+        items: [
+          { id: 'ccd_sun',      label: 'Sun Salutation — Dynamic Pass',         sub: 'Full sequence, one breath per transition' },
+          { id: 'ccd_warrior',  label: 'Warrior 2 — Each Side',                sub: '3 breaths only per side' },
+          { id: 'ccd_knees',    label: 'Both Knees to Chest',                   sub: '3 breaths' },
+          { id: 'ccd_crossrot', label: 'Single Knee Cross-Body Rotation',      sub: '3 breaths each side' },
+          { id: 'ccd_seatfwd',  label: 'Seated Forward Bend',                  sub: 'Hands to ankles — 3 breaths' },
+          { id: 'ccd_butter',   label: 'Butterfly',                            sub: '3 breaths' },
+          { id: 'ccd_wheel',    label: 'Yoga Wheel Thoracic Extension',        sub: 'One pass — 5 breaths' },
+        ]
       },
     ]
   },
 
+  // ── UPPER BODY ───────────────────────────────────────────────────────
   UPPER: {
     label: 'Upper Body',
     sections: [
+      {
+        id: 'upper_rewarmup',
+        title: 'Re-Warm-Up',
+        type: 'rewarmup',
+        note: 'Skip if going straight from Daily Mobility Session',
+        exercises: [
+          { id: 'rw_upper_shldclk',  name: 'Shoulder Clocks',          type: 'duration',   goal: { mins: 0, secs: 40 } },
+          { id: 'rw_upper_eagle',    name: 'Eagle Spread & Flap',       type: 'duration',   goal: { mins: 0, secs: 30 } },
+          { id: 'rw_upper_boneless', name: 'Boneless Dummy',            type: 'duration',   goal: { mins: 0, secs: 30 } },
+          { id: 'rw_upper_extrot',   name: 'External Rotation (BW)',    type: 'bodyweight', goal: { reps: 15 } },
+        ]
+      },
       {
         id: 'upper_blocks',
         title: 'Hand Blocks',
@@ -1045,16 +1245,16 @@ const WORKOUTS = {
         title: 'Primary Lifting',
         type: 'performance',
         hasRounds: true,
-        note: 'Rest up to 2 min between supersets',
+        note: 'Rest up to 2 min between supersets — up to 3 rounds',
         exercises: [
-          { id: 'hangrow', name: 'Hanging Rows (Parallettes)',  type: 'bodyweight', goal: { reps: 10 } },
+          { id: 'hangrow', name: 'Hanging Rows (Parallettes)',  type: 'strength',   goal: { reps: 10, weight: 0  } },
           { id: 'dbrow',   name: 'Dumbbell Rows',               type: 'strength',   goal: { reps: 10, weight: 30 } },
-          { id: 'pushup',  name: 'Push-Ups (Parallettes)',       type: 'bodyweight', goal: { reps: 15 } },
+          { id: 'pushup',  name: 'Push-Ups (Parallettes)',       type: 'strength',   goal: { reps: 15, weight: 0  } },
           { id: 'dbfly',   name: 'Dumbbell Flyes',               type: 'strength',   goal: { reps: 20, weight: 30 } },
           { id: 'traise',  name: 'Dumbbell T-Raises',            type: 'strength',   goal: { reps: 12, weight: 30 } },
           { id: 'arnold',  name: 'Arnold Press',                 type: 'strength',   goal: { reps: 20, weight: 30 } },
           { id: 'curl',    name: 'Dumbbell Bicep Curls',         type: 'strength',   goal: { reps: 12, weight: 30 } },
-          { id: 'dips',    name: 'Parallettes Dips',             type: 'bodyweight', goal: { reps: 15 } },
+          { id: 'dips',    name: 'Parallettes Dips',             type: 'strength',   goal: { reps: 15, weight: 0  } },
           { id: 'triext',  name: 'Triceps Extensions (DB)',      type: 'strength',   goal: { reps: 12, weight: 30 } },
         ]
       },
@@ -1062,19 +1262,139 @@ const WORKOUTS = {
         id: 'upper_shoulder',
         title: 'Shoulder Stability',
         type: 'performance',
+        note: 'Post-lifting only — internal rotation both sides; external rotation is daily in mobility sequence',
+        autoregNote: 'Left shoulder anterior pain present? Drop to 2.5 lbs on external rotation. Pain persists? Bodyweight only.',
         exercises: [
-          { id: 'introt',   name: 'Internal Shoulder Rotation',    type: 'strength', goal: { reps: 20, weight: 15 } },
-          { id: 'extrot',   name: 'External Shoulder Rotation',    type: 'strength', goal: { reps: 20, weight: 15 } },
-          { id: 'yraise',   name: 'Bent-Over Trapezius Y-Raises',  type: 'strength', goal: { reps: 20, weight: 15 } },
-          { id: 'forecurl', name: 'Forearm Curls',                 type: 'strength', goal: { reps: 20, weight: 20 } },
-          { id: 'foreflex', name: 'Forearm Flexion',               type: 'strength', goal: { reps: 20, weight: 10 } },
+          { id: 'introt',   name: 'Internal Shoulder Rotation',  type: 'strength', goal: { reps: 20, weight: 15 } },
+          { id: 'forecurl', name: 'Forearm Curls',               type: 'strength', goal: { reps: 20, weight: 20 } },
+          { id: 'foreflex', name: 'Forearm Flexion',             type: 'strength', goal: { reps: 20, weight: 10 } },
         ]
       },
       {
-        id: 'upper_stretch',
-        title: 'Stretching',
-        type: 'completion',
-        label: 'Stretching Complete (~20 min)'
+        id: 'upper_cooldown',
+        title: 'Section 5 Cool-Down',
+        type: 'checklist',
+        note: 'Dynamic only — one breath per transition, no static holds',
+        items: [
+          { id: 'ucd_sun',      label: 'Sun Salutation — Dynamic Pass',         sub: 'Full sequence, one breath per transition' },
+          { id: 'ucd_warrior',  label: 'Warrior 2 — Each Side',                sub: '3 breaths only per side' },
+          { id: 'ucd_knees',    label: 'Both Knees to Chest',                   sub: '3 breaths' },
+          { id: 'ucd_crossrot', label: 'Single Knee Cross-Body Rotation',      sub: '3 breaths each side' },
+          { id: 'ucd_seatfwd',  label: 'Seated Forward Bend',                  sub: 'Hands to ankles — 3 breaths' },
+          { id: 'ucd_butter',   label: 'Butterfly',                            sub: '3 breaths' },
+          { id: 'ucd_wheel',    label: 'Yoga Wheel Thoracic Extension',        sub: 'One pass — 5 breaths' },
+        ]
+      },
+    ]
+  },
+
+  // ── DAILY MOBILITY SEQUENCE ──────────────────────────────────────────
+  MOBILITY: {
+    label: 'Daily Mobility',
+    sections: [
+      {
+        id: 'mob_s1',
+        title: 'Section 1 — Walking Warm-Up',
+        type: 'checklist',
+        note: '10–12 min walking base — work head to toe in sequence',
+        items: [
+          { id: 'mob_s1_neck',     label: 'Neck Circles',              sub: '5 circles each direction — gentle only' },
+          { id: 'mob_s1_shldclk',  label: 'Shoulder Clocks',           sub: '20 forward, 20 backward' },
+          { id: 'mob_s1_eagle',    label: 'Eagle Spread & Flap',       sub: '20 reps — mid-back initiates the open' },
+          { id: 'mob_s1_wrist',    label: 'Wrist Rotations',           sub: '20 inside, 20 outside' },
+          { id: 'mob_s1_squeeze',  label: 'Hand Squeezes',             sub: '20 reps each hand' },
+          { id: 'mob_s1_bicep',    label: 'Bicep Pumps',               sub: '40 reps — slow to brisk' },
+          { id: 'mob_s1_tricep',   label: 'Tricep Extensions (T-shape)', sub: '20 reps both arms' },
+          { id: 'mob_s1_torso',    label: 'Walking Torso Rotations',   sub: '20 each direction — thoracic initiates, hips forward' },
+          { id: 'mob_s1_hip',      label: 'Hip Circles',               sub: '20 clockwise, 20 counterclockwise' },
+          { id: 'mob_s1_heeltoe',  label: 'Heel-to-Toe Walk',          sub: '20 paces heels, 20 paces ball-of-foot — twice each' },
+          { id: 'mob_s1_boneless', label: 'Boneless Dummy',            sub: '40 reps — arms genuinely limp' },
+          { id: 'mob_s1_swimmer',  label: 'Swimmer\'s Stretch',        sub: '40 reps — full backstroke arc' },
+        ]
+      },
+      {
+        id: 'mob_s2',
+        title: 'Section 2 — Corrective Chain',
+        type: 'performance',
+        note: 'Right knee / ankle / hip sequence — never skip',
+        exercises: [
+          { id: 'mob_toecircle',  name: 'Toe Circles — Left Foot',           type: 'duration',   goal: { mins: 0, secs: 40 } },
+          { id: 'mob_anklecirc',  name: 'Ankle Circles — Both Feet',         type: 'duration',   goal: { mins: 0, secs: 40 } },
+          { id: 'mob_wallankle',  name: 'Wall Ankle Stretch (Knee-to-Wall)', type: 'duration',   goal: { mins: 0, secs: 30 } },
+          { id: 'mob_figfour',    name: 'Supine Figure-Four Stretch',        type: 'duration',   goal: { mins: 1, secs: 30 } },
+          { id: 'mob_hipflex',    name: 'Kneeling Hip Flexor Stretch',       type: 'duration',   goal: { mins: 1, secs: 30 } },
+          { id: 'mob_clam',       name: 'Clamshells (2×15 each side)',       type: 'strength',   goal: { reps: 15, weight: 0 } },
+          { id: 'mob_bosu',       name: 'Bosu Balance Hold',                 type: 'duration',   goal: { mins: 0, secs: 20 } },
+          { id: 'mob_heelsquat',  name: 'Heel-Elevated Bodyweight Squat',    type: 'bodyweight', goal: { reps: 10 } },
+        ]
+      },
+      {
+        id: 'mob_s3',
+        title: 'Section 3 — Garage Sequence',
+        type: 'performance',
+        note: 'External rotations FIRST — then bo staff. Rotations require fresh infraspinatus.',
+        autoregNote: 'Left shoulder anterior pain? Drop to 2.5 lbs immediately. Pain persists? Bodyweight only.',
+        exercises: [
+          { id: 'mob_extrot_l', name: 'External Rotation — Left Side',   type: 'strength', goal: { reps: 15, weight: 5 } },
+          { id: 'mob_extrot_r', name: 'External Rotation — Right Side',  type: 'strength', goal: { reps: 15, weight: 5 } },
+        ]
+      },
+      {
+        id: 'mob_s3b',
+        title: 'Bo Staff',
+        type: 'checklist',
+        note: 'Pick up staff after both sides of external rotations are complete',
+        items: [
+          { id: 'mob_staff_2fwd',  label: 'Two-Handed Figure Eight — Forward',  sub: '20 reps' },
+          { id: 'mob_staff_2rev',  label: 'Two-Handed Figure Eight — Reverse',  sub: '20 reps' },
+          { id: 'mob_staff_rh',    label: 'One-Handed Figure Eight — Right Hand', sub: '20 forward + 20 reverse' },
+          { id: 'mob_staff_lh',    label: 'One-Handed Figure Eight — Left Hand',  sub: '20 forward + 20 reverse — note any restriction' },
+        ]
+      },
+      {
+        id: 'mob_s4a',
+        title: 'Section 4a — Myofascial Release',
+        type: 'checklist',
+        note: 'Pec first — always. Order matters.',
+        items: [
+          { id: 'mob_4a_pec',      label: 'Pectoral Release — Baseball Against Wall', sub: '45–60 sec sustained hold — left side, then right' },
+          { id: 'mob_4a_rhomboid', label: 'Rhomboid Release — Baseball Against Wall',  sub: '60–90 sec per spot — sustained hold, not rolling' },
+        ]
+      },
+      {
+        id: 'mob_s4b',
+        title: 'Section 4b — Full Stretching',
+        type: 'checklist',
+        note: '20–25 min — standard breath protocol unless noted (1 transitional breath + 5 full exhale breaths)',
+        items: [
+          { id: 'mob_4b_prayer',    label: 'Prayer Stretch (Reverse Prayer)',       sub: 'Wrist extensors, forearm flexors' },
+          { id: 'mob_4b_fistflex',  label: 'Assisted Fist Flexion',                sub: 'Wrist flexors, forearm extensors' },
+          { id: 'mob_4b_wall1',     label: 'Wall Stretch — Position 1',            sub: 'Pec major — arm at shoulder height, each side' },
+          { id: 'mob_4b_wall2',     label: 'Wall Stretch — Position 2',            sub: 'Pec minor — arm at 45° below shoulder, each side' },
+          { id: 'mob_4b_glide',     label: 'Posterior Humeral Glide',              sub: 'Left side only — 5 gentle reps after left wall stretch' },
+          { id: 'mob_4b_crossbody', label: 'Cross-Body Rear Deltoid Stretch',      sub: 'Post-baseball release — both sides' },
+          { id: 'mob_4b_leash',     label: 'Leash Shoulder Sequence',              sub: 'Triceps then internal rotation — both sides' },
+          { id: 'mob_4b_serratus',  label: 'Serratus Wall Slides',                 sub: '10 slow reps — shoulder blades flat to ribs' },
+          { id: 'mob_4b_sun',       label: 'Modified Sun Salutation',              sub: 'Full sequence — static holds first pass, dynamic second' },
+          { id: 'mob_4b_warrior',   label: 'Warrior 2 — Both Sides',              sub: '5 breaths each side — right knee tracks over 2nd toe' },
+          { id: 'mob_4b_knees',     label: 'Both Knees to Chest',                  sub: 'Lower back, sacrum, hip flexors' },
+          { id: 'mob_4b_singleknee',label: 'Single Knee to Chest — Each Side',    sub: 'Hip flexor, glute, SI joint' },
+          { id: 'mob_4b_crossrot',  label: 'Cross-Body Single Knee Rotation',     sub: 'Piriformis, IT band, thoracic rotation — each side' },
+          { id: 'mob_4b_plough',    label: 'Plough Pose',                          sub: 'FLAGGED — discontinue if neck discomfort' },
+          { id: 'mob_4b_seatfwd',   label: 'Seated Forward Bend Progression',     sub: 'Hips, hands to knees, hands to ankles + tiger palms' },
+          { id: 'mob_4b_widelegs',  label: 'Wide-Leg Forward Bend Sequence',      sub: 'Center + one-sided + oblique crunches' },
+          { id: 'mob_4b_butterfly', label: 'Butterfly Stretch',                   sub: 'Inner groin, hip adductors' },
+          { id: 'mob_4b_sptwist',   label: 'Seated Spinal Twist',                 sub: 'Initiate from thoracic — both sides' },
+          { id: 'mob_4b_anklerot',  label: 'Manual Ankle Rotation',               sub: '8 each direction, each foot' },
+          { id: 'mob_4b_toesfwd',   label: 'Toes Forward — Forward Bend',         sub: 'Plantar flexors, calf, ankle' },
+          { id: 'mob_4b_toesflex',  label: 'Toes Flexed Back — Forward Bend',     sub: 'Dorsiflexors, shin, plantar fascia' },
+          { id: 'mob_4b_supinate',  label: 'Foot Supination Stretch with PNF',    sub: '5 sec resist → release deeper — each side' },
+          { id: 'mob_4b_pronate',   label: 'Foot Pronation Stretch with PNF',     sub: '5 sec resist → release deeper — each side' },
+          { id: 'mob_4b_mtp',       label: 'Manual MTP Joint Mobilization',       sub: '10 gentle reps — left big toe traction + ROM' },
+          { id: 'mob_4b_toesplay',  label: 'Toe Splay',                           sub: '10 reps each foot — spread and hold 5 sec' },
+          { id: 'mob_4b_flexhall',  label: 'Flexor Hallucis Isolation',           sub: '10 reps each movement, each foot' },
+          { id: 'mob_4b_wheel',     label: 'Yoga Wheel Thoracic Extension',       sub: 'Mid-thoracic position (T4–T6) — 2 holds × 5 breaths' },
+        ]
       },
     ]
   }
@@ -1091,6 +1411,7 @@ let state = {
   currentSession: null,
   completedSections: new Set(),
   activeSectionId: null,
+  warmupSkipped: false,
 };
 
 // ══════════════════════════════════════════
@@ -1116,8 +1437,11 @@ function goHome() {
     selectedWorkout: null, selectedCondition: null, selectedSleep: null,
     sessionStart: null, currentSession: null,
     completedSections: new Set(), activeSectionId: null,
+    warmupSkipped: false,
   };
-  document.querySelectorAll('.workout-btn').forEach(b => b.classList.remove('selected'));
+  setCounters = {};
+  roundCounters = {};
+  document.querySelectorAll('.workout-btn, .mobility-btn').forEach(b => b.classList.remove('selected'));
   document.querySelectorAll('.cond-btn').forEach(b => b.classList.remove('selected'));
   document.getElementById('sessionNote').value = '';
   navTo('home');
@@ -1127,7 +1451,7 @@ function goHome() {
 // SELECTORS
 // ══════════════════════════════════════════
 function selectWorkout(el) {
-  document.querySelectorAll('.workout-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.workout-btn, .mobility-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   state.selectedWorkout = el.dataset.type;
 }
@@ -1153,12 +1477,40 @@ function autoExpand(el) {
 }
 
 // ══════════════════════════════════════════
+// START WORKOUT
+// ══════════════════════════════════════════
+function startWorkout() {
+  if (!state.selectedWorkout) { showToast('Select a session type', 'error'); return; }
+  if (!state.selectedCondition) { showToast('Select your condition', 'error'); return; }
+  if (!state.selectedSleep) { showToast('Select sleep rating', 'error'); return; }
+
+  state.sessionStart = Date.now();
+  state.completedSections = new Set();
+  state.warmupSkipped = false;
+
+  const workout = WORKOUTS[state.selectedWorkout];
+  document.getElementById('logTitle').textContent = workout.label.toUpperCase();
+  document.getElementById('logConditionDisplay').textContent =
+    state.selectedCondition.split('—')[0].trim() + ' · ' + state.selectedSleep.split('(')[0].trim();
+
+  const now = new Date();
+  document.getElementById('logDate').textContent =
+    now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+
+  buildWorkoutForm(state.selectedWorkout);
+  showScreen('screen-log');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+}
+
+// ══════════════════════════════════════════
 // BUILD WORKOUT FORM
 // ══════════════════════════════════════════
 function buildWorkoutForm(type) {
   const workout = WORKOUTS[type];
   const container = document.getElementById('exerciseContainer');
   container.innerHTML = '';
+  setCounters = {};
+  roundCounters = {};
 
   workout.sections.forEach(section => {
     const block = document.createElement('div');
@@ -1171,17 +1523,24 @@ function buildWorkoutForm(type) {
   buildSidebar(workout);
   updateProgress();
 
-  // Set first section active
   if (workout.sections.length > 0) {
     setActiveSection(workout.sections[0].id);
   }
 }
 
 function buildSectionHTML(section) {
+  // Completion sections get no Done button — checkbox is the only interaction
+  const showDoneBtn = (
+    section.type !== 'completion' &&
+    section.type !== 'cooldown' &&
+    section.type !== 'checklist'
+  );
+
+  // All sections share a single html variable
   let html = `
     <div class="section-header-bar" id="shdr_${section.id}">
       <div class="section-title">${section.title}</div>
-      <button class="done-btn" onclick="completeSection('${section.id}')">Done ✓</button>
+      ${showDoneBtn ? `<button class="done-btn" id="donebtn_${section.id}" onclick="completeSection('${section.id}')">Done ✓</button>` : ''}
     </div>
   `;
 
@@ -1189,27 +1548,54 @@ function buildSectionHTML(section) {
     html += `<div class="section-note">${section.note}</div>`;
   }
 
-  if (section.type === 'completion') {
+  if (section.autoregNote) {
+    html += `<div class="autoreg-note">⚠ ${section.autoregNote}</div>`;
+  }
+
+  // Re-warm-up section
+  if (section.type === 'rewarmup') {
+    html += `
+      <div class="skip-warmup-wrap">
+        <button class="skip-warmup-btn" id="skipwarmup_${section.id}" onclick="skipWarmup('${section.id}')">
+          ↷ Skip — going straight from mobility session
+        </button>
+      </div>
+    `;
+    section.exercises.forEach(ex => {
+      html += buildExerciseBlockHTML(ex, section.id, 0);
+    });
+    return html;
+  }
+
+  // Checklist section
+  if (section.type === 'checklist') {
+    html += buildChecklistHTML(section);
+    return html;
+  }
+
+  // Single-checkbox completion section
+  if (section.type === 'completion' || section.type === 'cooldown') {
     html += `
       <div class="completion-block" id="comp_${section.id}" onclick="toggleCompletion('${section.id}')">
         <div class="comp-label">${section.label}</div>
         <div class="completion-check" id="compcheck_${section.id}"></div>
       </div>
     `;
+    return html;
+  }
+
+  // Performance section
+  if (section.hasRounds) {
+    html += buildRoundBlock(section, 1);
+    html += `
+      <button class="add-round-btn" onclick="addRound('${section.id}')">
+        <span class="plus">+</span> Add Round
+      </button>
+    `;
   } else {
-    // Performance section
-    if (section.hasRounds) {
-      html += buildRoundBlock(section, 1);
-      html += `
-        <button class="add-round-btn" onclick="addRound('${section.id}')">
-          <span class="plus">+</span> Add Round
-        </button>
-      `;
-    } else {
-      section.exercises.forEach(ex => {
-        html += buildExerciseBlockHTML(ex, section.id, 0);
-      });
-    }
+    section.exercises.forEach(ex => {
+      html += buildExerciseBlockHTML(ex, section.id, 0);
+    });
   }
 
   return html;
@@ -1261,49 +1647,92 @@ function buildExerciseBlockHTML(ex, sectionId, roundNum) {
   `;
 }
 
-function buildSetRowHTML(ex, uid, setNum) {
+function buildChecklistHTML(section) {
+  const total = section.items.length;
+  let html = `
+    <div class="checklist-block" id="cklist_${section.id}">
+      <div class="checklist-progress" id="ckprog_${section.id}">0 / ${total}</div>
+  `;
+  section.items.forEach((item, idx) => {
+    html += `
+      <div class="checklist-item" id="ckitem_${item.id}" onclick="toggleChecklistItem('${section.id}', '${item.id}', ${total})">
+        <div class="checklist-label">
+          ${item.label}
+          ${item.sub ? `<span class="checklist-sub">${item.sub}</span>` : ''}
+        </div>
+        <div class="checklist-check" id="ckcheck_${item.id}"></div>
+      </div>
+    `;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function toggleChecklistItem(sectionId, itemId, total) {
+  const item  = document.getElementById('ckitem_'  + itemId);
+  const check = document.getElementById('ckcheck_' + itemId);
+  if (!item) return;
+
+  const nowChecked = item.classList.toggle('checked');
+  check.textContent = nowChecked ? '✓' : '';
+
+  // Update progress counter
+  const block    = document.getElementById('cklist_' + sectionId);
+  const progEl   = document.getElementById('ckprog_'  + sectionId);
+  const checked  = block ? block.querySelectorAll('.checklist-item.checked').length : 0;
+  if (progEl) progEl.textContent = `${checked} / ${total}`;
+
+  updateProgress();
+}
+
+function buildSetRowHTML(ex, uid, setNum, prefillReps, prefillWeight, prefillMins, prefillSecs) {
   if (ex.type === 'strength') {
-    const rGoal = ex.goal ? ex.goal.reps : '';
-    const wGoal = ex.goal ? ex.goal.weight : '';
+    const rGoal  = (prefillReps   !== undefined) ? prefillReps   : (ex.goal ? ex.goal.reps   : '');
+    const wGoal  = (prefillWeight !== undefined) ? prefillWeight : (ex.goal ? ex.goal.weight : '');
+    const rVal   = (prefillReps   !== undefined) ? prefillReps   : '';
+    const wVal   = (prefillWeight !== undefined) ? prefillWeight : '';
     return `
       <div class="set-row strength-row" id="setrow_${uid}_${setNum}">
         <div class="set-label">S${setNum}</div>
         <div class="set-field-wrap">
           <div class="set-field-label">Reps</div>
-          <input type="number" inputmode="numeric" placeholder="${rGoal}" id="reps_${uid}_${setNum}" />
+          <input type="number" inputmode="numeric" placeholder="${rGoal}" value="${rVal}" id="reps_${uid}_${setNum}" />
         </div>
         <div class="set-field-wrap">
           <div class="set-field-label">Weight (lbs)</div>
-          <input type="number" inputmode="decimal" placeholder="${wGoal}" id="wt_${uid}_${setNum}" />
+          <input type="number" inputmode="decimal" placeholder="${wGoal}" value="${wVal}" id="wt_${uid}_${setNum}" />
         </div>
         <button class="confirm-btn" id="conf_${uid}_${setNum}" onclick="confirmSet('${uid}', ${setNum}, '${ex.type}')">✓</button>
       </div>
     `;
   } else if (ex.type === 'bodyweight') {
-    const rGoal = ex.goal ? ex.goal.reps : '';
+    const rGoal = (prefillReps !== undefined) ? prefillReps : (ex.goal ? ex.goal.reps : '');
+    const rVal  = (prefillReps !== undefined) ? prefillReps : '';
     return `
       <div class="set-row bodyweight-row" id="setrow_${uid}_${setNum}">
         <div class="set-label">S${setNum}</div>
         <div class="set-field-wrap">
           <div class="set-field-label">Reps</div>
-          <input type="number" inputmode="numeric" placeholder="${rGoal}" id="reps_${uid}_${setNum}" />
+          <input type="number" inputmode="numeric" placeholder="${rGoal}" value="${rVal}" id="reps_${uid}_${setNum}" />
         </div>
         <button class="confirm-btn" id="conf_${uid}_${setNum}" onclick="confirmSet('${uid}', ${setNum}, '${ex.type}')">✓</button>
       </div>
     `;
   } else if (ex.type === 'duration') {
-    const mGoal = ex.goal ? ex.goal.mins : '';
-    const sGoal = ex.goal ? ex.goal.secs : '';
+    const mGoal = (prefillMins !== undefined) ? prefillMins : (ex.goal ? ex.goal.mins : '');
+    const sGoal = (prefillSecs !== undefined) ? prefillSecs : (ex.goal ? ex.goal.secs : '');
+    const mVal  = (prefillMins !== undefined) ? prefillMins : '';
+    const sVal  = (prefillSecs !== undefined) ? prefillSecs : '';
     return `
       <div class="set-row duration-row" id="setrow_${uid}_${setNum}">
         <div class="set-label">S${setNum}</div>
         <div class="set-field-wrap">
           <div class="set-field-label">Min</div>
-          <input type="number" inputmode="numeric" placeholder="${mGoal}" id="mins_${uid}_${setNum}" />
+          <input type="number" inputmode="numeric" placeholder="${mGoal}" value="${mVal}" id="mins_${uid}_${setNum}" />
         </div>
         <div class="set-field-wrap">
           <div class="set-field-label">Sec</div>
-          <input type="number" inputmode="numeric" placeholder="${sGoal !== '' ? String(sGoal).padStart(2,'0') : ''}" id="secs_${uid}_${setNum}" />
+          <input type="number" inputmode="numeric" placeholder="${sGoal !== '' ? String(sGoal).padStart(2,'0') : ''}" value="${sVal !== '' ? sVal : ''}" id="secs_${uid}_${setNum}" />
         </div>
         <button class="confirm-btn" id="conf_${uid}_${setNum}" onclick="confirmSet('${uid}', ${setNum}, '${ex.type}')">✓</button>
       </div>
@@ -1315,40 +1744,61 @@ function buildSetRowHTML(ex, uid, setNum) {
 // ══════════════════════════════════════════
 // SET / ROUND INTERACTIONS
 // ══════════════════════════════════════════
-let setCounters = {}; // uid -> current set count
+let setCounters = {};
+let roundCounters = {};
 
 function addSet(uid, exId, sectionId, roundNum) {
   if (!setCounters[uid]) setCounters[uid] = 1;
   setCounters[uid]++;
   const newNum = setCounters[uid];
+  const prevNum = newNum - 1;
 
-  // Find the exercise to get goal data
-  const workout = WORKOUTS[state.selectedWorkout];
+  // Find exercise definition across all workouts
   let foundEx = null;
-  workout.sections.forEach(s => {
-    if (s.exercises) s.exercises.forEach(e => { if (e.id === exId) foundEx = e; });
+  Object.values(WORKOUTS).forEach(w => {
+    w.sections.forEach(s => {
+      if (s.exercises) s.exercises.forEach(e => { if (e.id === exId) foundEx = e; });
+    });
   });
   if (!foundEx) return;
+
+  // Read actual values from the previous set to pre-fill the new one
+  let prefillReps, prefillWeight, prefillMins, prefillSecs;
+
+  if (foundEx.type === 'strength') {
+    const prevReps = document.getElementById(`reps_${uid}_${prevNum}`);
+    const prevWt   = document.getElementById(`wt_${uid}_${prevNum}`);
+    if (prevReps) prefillReps   = prevReps.value !== '' ? prevReps.value : prevReps.placeholder;
+    if (prevWt)   prefillWeight = prevWt.value   !== '' ? prevWt.value   : prevWt.placeholder;
+  } else if (foundEx.type === 'bodyweight') {
+    const prevReps = document.getElementById(`reps_${uid}_${prevNum}`);
+    if (prevReps) prefillReps = prevReps.value !== '' ? prevReps.value : prevReps.placeholder;
+  } else if (foundEx.type === 'duration') {
+    const prevMins = document.getElementById(`mins_${uid}_${prevNum}`);
+    const prevSecs = document.getElementById(`secs_${uid}_${prevNum}`);
+    if (prevMins) prefillMins = prevMins.value !== '' ? prevMins.value : prevMins.placeholder;
+    if (prevSecs) prefillSecs = prevSecs.value !== '' ? prevSecs.value : prevSecs.placeholder;
+  }
 
   const container = document.getElementById('sets_' + uid);
   if (!container) return;
   const div = document.createElement('div');
-  div.innerHTML = buildSetRowHTML(foundEx, uid, newNum);
+  div.innerHTML = buildSetRowHTML(foundEx, uid, newNum, prefillReps, prefillWeight, prefillMins, prefillSecs);
   container.appendChild(div.firstElementChild);
 }
-
-let roundCounters = {}; // sectionId -> current round count
 
 function addRound(sectionId) {
   if (!roundCounters[sectionId]) roundCounters[sectionId] = 1;
   roundCounters[sectionId]++;
   const newRound = roundCounters[sectionId];
 
-  const workout = WORKOUTS[state.selectedWorkout];
-  const section = workout.sections.find(s => s.id === sectionId);
+  let section = null;
+  Object.values(WORKOUTS).forEach(w => {
+    const found = w.sections.find(s => s.id === sectionId);
+    if (found) section = found;
+  });
   if (!section) return;
 
-  // Find add-round button and insert before it
   const sblock = document.getElementById('sblock_' + sectionId);
   const addBtn = sblock.querySelector('.add-round-btn');
   const div = document.createElement('div');
@@ -1365,7 +1815,6 @@ function confirmSet(uid, setNum, type) {
   const btn = document.getElementById(`conf_${uid}_${setNum}`);
   if (!btn) return;
 
-  // Fill in placeholders as confirmed values if fields are empty
   if (type === 'strength') {
     const rInput = document.getElementById(`reps_${uid}_${setNum}`);
     const wInput = document.getElementById(`wt_${uid}_${setNum}`);
@@ -1397,10 +1846,33 @@ function toggleFlag(btn, cls) {
 
 function toggleNote(uid) {
   const toggle = document.getElementById('notetoggle_' + uid);
-  const panel = document.getElementById('notepanel_' + uid);
+  const panel  = document.getElementById('notepanel_' + uid);
   if (!toggle || !panel) return;
   const isOpen = panel.classList.toggle('open');
   toggle.classList.toggle('open', isOpen);
+}
+
+// ══════════════════════════════════════════
+// SKIP WARM-UP
+// ══════════════════════════════════════════
+function skipWarmup(sectionId) {
+  const btn = document.getElementById('skipwarmup_' + sectionId);
+  if (!btn) return;
+
+  state.warmupSkipped = true;
+  btn.classList.add('skipped');
+  btn.textContent = '✓ Skipped — came straight from mobility session';
+
+  // Hide exercise blocks in re-warm-up section
+  const sblock = document.getElementById('sblock_' + sectionId);
+  if (sblock) {
+    sblock.querySelectorAll('.exercise-block').forEach(el => {
+      el.style.display = 'none';
+    });
+  }
+
+  // Mark section complete
+  completeSection(sectionId);
 }
 
 // ══════════════════════════════════════════
@@ -1412,7 +1884,50 @@ function toggleCompletion(sectionId) {
   if (!block) return;
   const nowChecked = block.classList.toggle('checked');
   check.textContent = nowChecked ? '✓' : '';
+  if (nowChecked) {
+    completeSection(sectionId);
+  } else {
+    state.completedSections.delete(sectionId);
+    const hdr = document.getElementById('shdr_' + sectionId);
+    if (hdr) hdr.classList.remove('done-section');
+    const sbi = document.getElementById('sbi_' + sectionId);
+    if (sbi) sbi.classList.remove('completed');
+    updateProgress();
+  }
+}
+
+// ══════════════════════════════════════════
+// SECTION DONE BUTTON
+// ══════════════════════════════════════════
+function completeSection(sectionId) {
+  state.completedSections.add(sectionId);
+
+  const hdr = document.getElementById('shdr_' + sectionId);
+  if (hdr) hdr.classList.add('done-section');
+
+  const doneBtn = document.getElementById('donebtn_' + sectionId);
+  if (doneBtn) doneBtn.classList.add('confirmed');
+
+  const sbi = document.getElementById('sbi_' + sectionId);
+  if (sbi) sbi.classList.add('completed');
+
   updateProgress();
+
+  // Auto-advance to next uncompleted section
+  const workout = WORKOUTS[state.selectedWorkout];
+  if (workout) {
+    const sections = workout.sections;
+    const idx = sections.findIndex(s => s.id === sectionId);
+    for (let i = idx + 1; i < sections.length; i++) {
+      if (!state.completedSections.has(sections[i].id)) {
+        setTimeout(() => {
+          scrollToSection(sections[i].id);
+          setActiveSection(sections[i].id);
+        }, 200);
+        break;
+      }
+    }
+  }
 }
 
 // ══════════════════════════════════════════
@@ -1448,43 +1963,12 @@ function setActiveSection(sectionId) {
     el.classList.remove('active');
   });
   const hdr = document.getElementById('shdr_' + sectionId);
-  if (hdr && !state.completedSections.has(sectionId)) {
+  if (hdr && !hdr.classList.contains('done-section')) {
     hdr.classList.add('active-section');
   }
   const sbi = document.getElementById('sbi_' + sectionId);
-  if (sbi && !state.completedSections.has(sectionId)) {
+  if (sbi && !sbi.classList.contains('completed')) {
     sbi.classList.add('active');
-  }
-}
-
-function completeSection(sectionId) {
-  state.completedSections.add(sectionId);
-
-  // Update header bar
-  const hdr = document.getElementById('shdr_' + sectionId);
-  if (hdr) {
-    hdr.classList.remove('active-section');
-    hdr.classList.add('done-section');
-    const doneBtn = hdr.querySelector('.done-btn');
-    if (doneBtn) doneBtn.classList.add('confirmed');
-  }
-
-  // Update sidebar
-  const sbi = document.getElementById('sbi_' + sectionId);
-  if (sbi) {
-    sbi.classList.remove('active');
-    sbi.classList.add('completed');
-  }
-
-  updateProgress();
-
-  // Auto-advance to next section
-  const workout = WORKOUTS[state.selectedWorkout];
-  const sections = workout.sections;
-  const idx = sections.findIndex(s => s.id === sectionId);
-  if (idx >= 0 && idx < sections.length - 1) {
-    const nextSection = sections[idx + 1];
-    setTimeout(() => scrollToSection(nextSection.id), 200);
   }
 }
 
@@ -1495,142 +1979,117 @@ function updateProgress() {
   const workout = WORKOUTS[state.selectedWorkout];
   if (!workout) return;
   const total = workout.sections.length;
-  const done = state.completedSections.size;
-  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const done  = state.completedSections.size;
+  const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressText').textContent = `${done} of ${total} sections done`;
 }
 
 // ══════════════════════════════════════════
-// START
-// ══════════════════════════════════════════
-function startWorkout() {
-  if (!state.selectedWorkout) { showToast('Select a workout type', 'error'); return; }
-  if (!state.selectedCondition) { showToast('Select your condition today', 'error'); return; }
-  if (!state.selectedSleep) { showToast('Select sleep quality', 'error'); return; }
-
-  state.completedSections = new Set();
-  roundCounters = {};
-  setCounters = {};
-
-  document.getElementById('logTitle').textContent = state.selectedWorkout;
-  document.getElementById('logConditionDisplay').textContent =
-    state.selectedCondition + ' · ' + state.selectedSleep;
-
-  const now = new Date();
-  document.getElementById('logDate').innerHTML =
-    now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) +
-    '<br/>' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-
-  state.sessionStart = Date.now();
-
-  buildWorkoutForm(state.selectedWorkout);
-  showScreen('screen-log');
-  document.getElementById('nav-home').classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-// ══════════════════════════════════════════
-// COLLECT & FINISH
+// COLLECT SESSION DATA
 // ══════════════════════════════════════════
 function collectSessionData() {
+  const now      = new Date();
+  const duration = state.sessionStart
+    ? Math.round((Date.now() - state.sessionStart) / 60000)
+    : 0;
+
   const workout = WORKOUTS[state.selectedWorkout];
-  const logLines = [];
-  let failureCount = 0, skipCount = 0, sectionsDone = 0;
+  const lines   = [];
 
   workout.sections.forEach(section => {
-    const isDone = state.completedSections.has(section.id);
-    if (isDone) sectionsDone++;
+    if (section.type === 'checklist') {
+      const block   = document.getElementById('cklist_' + section.id);
+      const checked = block ? block.querySelectorAll('.checklist-item.checked').length : 0;
+      const total   = section.items ? section.items.length : 0;
+      lines.push(`[${section.title}]: ${checked}/${total} items completed`);
+      return;
+    }
 
-    if (section.type === 'completion') {
-      const checked = document.getElementById('comp_' + section.id)?.classList.contains('checked');
-      logLines.push(`[${checked ? '✓' : '—'}] ${section.title}`);
-    } else {
-      logLines.push(`\n${section.title}:`);
+    if (section.type === 'completion' || section.type === 'cooldown') return;
 
-      const exercisesToLog = section.exercises || [];
-
-      // Handle rounds
-      const maxRound = (roundCounters[section.id] || 1);
-      const roundStart = section.hasRounds ? 1 : 0;
-      const roundEnd   = section.hasRounds ? maxRound : 0;
-
-      if (section.hasRounds) {
-        for (let r = 1; r <= maxRound; r++) {
-          // Check round block still in DOM (may have been removed)
-          const roundEl = document.getElementById(`round_${section.id}_${r}`);
-          if (!roundEl) continue;
-          logLines.push(`  Round ${r}:`);
-          exercisesToLog.forEach(ex => {
-            const uid = `${ex.id}_s${section.id}_r${r}`;
-            logLines.push(...collectExerciseLog(ex, uid, failureCount, skipCount));
-          });
-        }
+    if (section.type === 'rewarmup') {
+      if (state.warmupSkipped) {
+        lines.push(`[${section.title}]: SKIPPED — came from mobility session`);
       } else {
-        exercisesToLog.forEach(ex => {
+        lines.push(`[${section.title}]:`);
+        section.exercises.forEach(ex => {
           const uid = `${ex.id}_s${section.id}_r0`;
-          logLines.push(...collectExerciseLog(ex, uid, failureCount, skipCount));
+          lines.push(...collectExerciseLines(ex, uid));
         });
       }
+      return;
+    }
+
+    if (section.hasRounds) {
+      let r = 1;
+      while (document.getElementById(`round_${section.id}_${r}`)) {
+        lines.push(`[${section.title} — Round ${r}]:`);
+        section.exercises.forEach(ex => {
+          const uid = `${ex.id}_s${section.id}_r${r}`;
+          lines.push(...collectExerciseLines(ex, uid));
+        });
+        r++;
+      }
+    } else if (section.exercises) {
+      lines.push(`[${section.title}]:`);
+      section.exercises.forEach(ex => {
+        const uid = `${ex.id}_s${section.id}_r0`;
+        lines.push(...collectExerciseLines(ex, uid));
+      });
     }
   });
 
-  // Count flags from all exercise blocks in DOM
-  document.querySelectorAll('.flag-btn.active-failure').forEach(() => failureCount++);
-  document.querySelectorAll('.flag-btn.active-skip').forEach(() => skipCount++);
-
-  const elapsed = state.sessionStart ? Math.round((Date.now() - state.sessionStart) / 60000) : 0;
-
   return {
-    date: new Date().toLocaleDateString('en-US'),
-    workoutType: state.selectedWorkout,
-    condition: state.selectedCondition,
-    sleep: state.selectedSleep,
-    duration: elapsed,
-    sectionsDone,
+    date:          now.toLocaleDateString('en-US'),
+    workoutType:   workout.label,
+    condition:     state.selectedCondition  || '',
+    sleep:         state.selectedSleep      || '',
+    duration,
+    sectionsDone:  state.completedSections.size,
     totalSections: workout.sections.length,
-    exerciseLog: logLines.join('\n'),
-    note: document.getElementById('sessionNote').value.trim(),
-    failureCount,
-    skipCount,
+    warmupSkipped: state.warmupSkipped,
+    failureCount:  document.querySelectorAll('.flag-btn.active-failure').length,
+    skipCount:     document.querySelectorAll('.flag-btn.active-skip').length,
+    exerciseLog:   lines.join('\n'),
+    note:          document.getElementById('sessionNote').value.trim(),
   };
 }
 
-function collectExerciseLog(ex, uid, failureCount, skipCount) {
-  const lines = [];
-  const maxSets = setCounters[uid] || 1;
+function collectExerciseLines(ex, uid) {
+  const lines   = [];
+  const block   = document.getElementById('exblock_' + uid);
+  if (!block) return lines;
+
   const setLines = [];
-
-  for (let s = 1; s <= maxSets; s++) {
-    const confBtn = document.getElementById(`conf_${uid}_${s}`);
-    if (!confBtn) continue;
-    const confirmed = confBtn.classList.contains('confirmed');
-
+  let s = 1;
+  while (document.getElementById(`setrow_${uid}_${s}`)) {
     if (ex.type === 'strength') {
-      const r = document.getElementById(`reps_${uid}_${s}`)?.value || '—';
-      const w = document.getElementById(`wt_${uid}_${s}`)?.value || '—';
-      setLines.push(`S${s}: ${r} reps @ ${w}lbs${confirmed ? '' : ' (unconfirmed)'}`);
+      const r = document.getElementById(`reps_${uid}_${s}`);
+      const w = document.getElementById(`wt_${uid}_${s}`);
+      const rv = r ? (r.value || r.placeholder || '—') : '—';
+      const wv = w ? (w.value || w.placeholder || '—') : '—';
+      setLines.push(`${rv}r @ ${wv}lb`);
     } else if (ex.type === 'bodyweight') {
-      const r = document.getElementById(`reps_${uid}_${s}`)?.value || '—';
-      setLines.push(`S${s}: ${r} reps${confirmed ? '' : ' (unconfirmed)'}`);
+      const r  = document.getElementById(`reps_${uid}_${s}`);
+      const rv = r ? (r.value || r.placeholder || '—') : '—';
+      setLines.push(`${rv}r`);
     } else if (ex.type === 'duration') {
-      const m = document.getElementById(`mins_${uid}_${s}`)?.value || '0';
-      const sc = document.getElementById(`secs_${uid}_${s}`)?.value || '00';
-      setLines.push(`S${s}: ${m}m ${String(sc).padStart(2,'0')}s${confirmed ? '' : ' (unconfirmed)'}`);
+      const m  = document.getElementById(`mins_${uid}_${s}`);
+      const sc = document.getElementById(`secs_${uid}_${s}`);
+      const mv = m  ? (m.value  || m.placeholder  || '0') : '0';
+      const sv = sc ? (sc.value || sc.placeholder || '00') : '00';
+      setLines.push(`${mv}m${String(sv).padStart(2,'0')}s`);
     }
+    s++;
   }
 
-  // Get note
-  const noteTA = document.getElementById('notepanel_' + uid)?.querySelector('textarea');
-  const noteVal = noteTA ? noteTA.value.trim() : '';
-
-  // Get flags
-  const block = document.getElementById('exblock_' + uid);
   let flag = '';
-  if (block) {
-    if (block.querySelector('.flag-btn.active-failure')) flag = ' [FAILURE]';
-    if (block.querySelector('.flag-btn.active-skip')) flag = ' [SKIP]';
-  }
+  if (block.querySelector('.flag-btn.active-failure')) flag = ' [FAILURE]';
+  if (block.querySelector('.flag-btn.active-skip'))    flag = ' [SKIP]';
+
+  const noteEl  = block.querySelector('.note-panel textarea');
+  const noteVal = noteEl ? noteEl.value.trim() : '';
 
   if (setLines.length > 0 || flag) {
     lines.push(`  ${ex.name}${flag}: ${setLines.join(' | ')}${noteVal ? ' | Note: ' + noteVal : ''}`);
@@ -1667,9 +2126,16 @@ function renderSummary(session) {
     session.workoutType + ' // ' + session.date;
 
   const stats = document.getElementById('summaryStats');
+  const warmupRow = (session.workoutType !== 'Daily Mobility')
+    ? `<div class="summary-row">
+         <span class="summary-key">Warm-Up</span>
+         <span class="summary-val">${session.warmupSkipped ? 'Skipped ↷' : 'Completed'}</span>
+       </div>`
+    : '';
+
   stats.innerHTML = `
     <div class="summary-row">
-      <span class="summary-key">Workout</span>
+      <span class="summary-key">Session</span>
       <span class="summary-val">${session.workoutType}</span>
     </div>
     <div class="summary-row">
@@ -1688,6 +2154,7 @@ function renderSummary(session) {
       <span class="summary-key">Sleep</span>
       <span class="summary-val">${session.sleep.split('(')[0].trim()}</span>
     </div>
+    ${warmupRow}
     <div class="summary-row">
       <span class="summary-key">Failures</span>
       <span class="summary-val">${session.failureCount || '—'}</span>
@@ -1728,7 +2195,7 @@ function getLocalHistory() {
 
 function renderHistory() {
   const history = getLocalHistory();
-  const list = document.getElementById('historyList');
+  const list    = document.getElementById('historyList');
   if (!history.length) {
     list.innerHTML = '<div style="color:var(--text-dim); font-size:13px; text-align:center; padding:40px 0;">No sessions logged yet.</div>';
     return;
@@ -1739,7 +2206,7 @@ function renderHistory() {
         <div class="history-type">${s.workoutType}</div>
         <div class="history-date">${s.date}</div>
       </div>
-      <div class="history-meta">${s.condition ? s.condition.split('—')[0].trim() : ''} · ${s.sleep ? s.sleep.split('(')[0].trim() : ''} · ${s.duration || 0} min · ${s.sectionsDone || '?'}/${s.totalSections || '?'} sections</div>
+      <div class="history-meta">${s.condition ? s.condition.split('—')[0].trim() : ''} · ${s.sleep ? s.sleep.split('(')[0].trim() : ''} · ${s.duration || 0} min · ${s.sectionsDone || '?'}/${s.totalSections || '?'} sections${s.warmupSkipped ? ' · warm-up skipped' : ''}</div>
       <div class="history-detail" id="hdetail_${i}">
         <div class="history-detail-row"><span>Failures</span><span>${s.failureCount || '—'}</span></div>
         <div class="history-detail-row"><span>Skipped</span><span>${s.skipCount || '—'}</span></div>
@@ -1759,7 +2226,7 @@ function toggleHistoryDetail(i) {
 // GOOGLE SHEETS
 // ══════════════════════════════════════════
 async function pushToSheets(session) {
-  const url = localStorage.getItem('tmh_sheet_url');
+  const url      = localStorage.getItem('tmh_sheet_url');
   const statusEl = document.getElementById('saveStatus');
 
   if (!url) {
@@ -1769,21 +2236,22 @@ async function pushToSheets(session) {
 
   try {
     const payload = {
-      date: session.date,
-      workoutType: session.workoutType,
-      condition: session.condition,
-      sleep: session.sleep,
-      duration: session.duration,
-      sectionsDone: session.sectionsDone + '/' + session.totalSections,
-      exerciseLog: session.exerciseLog,
-      note: session.note,
+      date:          session.date,
+      workoutType:   session.workoutType,
+      condition:     session.condition,
+      sleep:         session.sleep,
+      duration:      session.duration,
+      sectionsDone:  session.sectionsDone + '/' + session.totalSections,
+      warmupSkipped: session.warmupSkipped,
+      exerciseLog:   session.exerciseLog,
+      note:          session.note,
     };
 
     await fetch(url, {
-      method: 'POST',
-      mode: 'no-cors',
+      method:  'POST',
+      mode:    'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body:    JSON.stringify(payload),
     });
 
     if (statusEl) {
@@ -1804,16 +2272,16 @@ async function pushToSheets(session) {
 // SETTINGS
 // ══════════════════════════════════════════
 function initSettings() {
-  const url = localStorage.getItem('tmh_sheet_url');
-  const dot = document.getElementById('sheetStatusDot');
-  const txt = document.getElementById('sheetStatusText');
+  const url  = localStorage.getItem('tmh_sheet_url');
+  const dot  = document.getElementById('sheetStatusDot');
+  const txt  = document.getElementById('sheetStatusText');
   const input = document.getElementById('sheetUrlInput');
   if (url) {
-    dot.className = 'status-dot connected';
+    dot.className   = 'status-dot connected';
     txt.textContent = 'Connected';
-    input.value = url;
+    input.value     = url;
   } else {
-    dot.className = 'status-dot disconnected';
+    dot.className   = 'status-dot disconnected';
     txt.textContent = 'Not configured';
   }
 }
@@ -1840,8 +2308,8 @@ async function testSheetConnection() {
 function exportData() {
   const data = getLocalHistory();
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = URL.createObjectURL(blob);
   a.download = 'tmh_workout_log.json';
   a.click();
 }
@@ -1867,9 +2335,9 @@ function copyScript() {
 // ══════════════════════════════════════════
 let toastTimer;
 function showToast(msg, type = '') {
-  const el = document.getElementById('toast');
+  const el    = document.getElementById('toast');
   el.textContent = msg;
-  el.className = 'show' + (type ? ' ' + type : '');
+  el.className   = 'show' + (type ? ' ' + type : '');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => { el.className = ''; }, 2800);
 }
