@@ -1107,14 +1107,14 @@ function doGet(e) {
 <div id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // WORKOUT CONFIGURATION - All program data lives here.
 // To update the program, edit this object only.
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 
 const WORKOUTS = {
 
-  // ── LOWER BODY ──────────────────────────────────────────────────
+  // == LOWER BODY ==================================================
   LOWER: {
     label: 'Lower Body',
     sections: [
@@ -1212,15 +1212,15 @@ const WORKOUTS = {
           { id: 'lcd_singleknee', label: 'Single Knee to Chest - Each Side',  sub: 'Hip flexor, glute, SI joint - 5 breaths' },
           { id: 'lcd_crossrot',   label: 'Cross-Body Single Knee Rotation',   sub: 'Piriformis, IT band - 5 breaths each side' },
           { id: 'lcd_plough',     label: 'Plough Pose',                       sub: 'FLAGGED - discontinue if neck discomfort' },
-          { id: 'lcd_seatfwd',    label: 'Seated Forward Bend Progression',   sub: 'Hips → hands to knees → hands to ankles + tiger palms' },
+          { id: 'lcd_seatfwd',    label: 'Seated Forward Bend Progression',   sub: 'Hips ? hands to knees ? hands to ankles + tiger palms' },
           { id: 'lcd_widelegs',   label: 'Wide-Leg Forward Bend Sequence',    sub: 'Center + one-sided + oblique crunches' },
           { id: 'lcd_butterfly',  label: 'Butterfly Stretch',                 sub: 'Inner groin, hip adductors - 5 breaths' },
           { id: 'lcd_sptwist',    label: 'Seated Spinal Twist',               sub: 'Initiate from thoracic - 5 breaths each side' },
           { id: 'lcd_anklerot',   label: 'Manual Ankle Rotation',             sub: '8 each direction, each foot' },
           { id: 'lcd_toesfwd',    label: 'Toes Forward - Forward Bend',       sub: 'Plantar flexors, calf, ankle' },
           { id: 'lcd_toesflex',   label: 'Toes Flexed Back - Forward Bend',   sub: 'Dorsiflexors, shin, plantar fascia' },
-          { id: 'lcd_supinate',   label: 'Foot Supination Stretch with PNF',  sub: '5 sec resist → release deeper - each side' },
-          { id: 'lcd_pronate',    label: 'Foot Pronation Stretch with PNF',   sub: '5 sec resist → release deeper - each side' },
+          { id: 'lcd_supinate',   label: 'Foot Supination Stretch with PNF',  sub: '5 sec resist ? release deeper - each side' },
+          { id: 'lcd_pronate',    label: 'Foot Pronation Stretch with PNF',   sub: '5 sec resist ? release deeper - each side' },
           { id: 'lcd_mtp',        label: 'Manual MTP Joint Mobilization',     sub: '10 gentle reps - left big toe traction + ROM' },
           { id: 'lcd_toesplay',   label: 'Toe Splay',                         sub: '10 reps each foot - spread and hold 5 sec' },
           { id: 'lcd_flexhall',   label: 'Flexor Hallucis Isolation',         sub: '10 reps each movement, each foot' },
@@ -1229,7 +1229,7 @@ const WORKOUTS = {
     ]
   },
 
-  // ── CORE ─────────────────────────────────────────────────────────
+  // == CORE =========================================================
   CORE: {
     label: 'Core',
     sections: [
@@ -1326,7 +1326,7 @@ const WORKOUTS = {
           { id: 'ccd_leash',     label: 'Leash Shoulder Sequence',         sub: 'Triceps then internal rotation - 3 breaths each position' },
           { id: 'ccd_crossbody', label: 'Cross-Body Rear Deltoid Stretch', sub: '3 breaths each side' },
           { id: 'ccd_sptwist',   label: 'Seated Spinal Twist',             sub: '3 breaths each side' },
-          { id: 'ccd_wheel',     label: 'Yoga Wheel Thoracic Extension',   sub: 'Mid-thoracic T4-T6 - 2 holds × 5 breaths (full protocol)' },
+          { id: 'ccd_wheel',     label: 'Yoga Wheel Thoracic Extension',   sub: 'Mid-thoracic T4-T6 - 2 holds ? 5 breaths (full protocol)' },
           { id: 'ccd_anklerot',  label: 'Manual Ankle Rotation',           sub: '5 each direction, each foot' },
           { id: 'ccd_toesplay',  label: 'Toe Splay',                       sub: '10 reps each foot' },
           { id: 'ccd_prayer',    label: 'Prayer Stretch (Reverse Prayer)', sub: 'Wrist extensors - 3 breaths' },
@@ -1336,7 +1336,7 @@ const WORKOUTS = {
     ]
   },
 
-  // ── UPPER BODY ───────────────────────────────────────────────────
+  // == UPPER BODY ===================================================
   UPPER: {
     label: 'Upper Body',
     sections: [
@@ -1448,7 +1448,7 @@ const WORKOUTS = {
           { id: 'ucd_prayer',    label: 'Prayer Stretch (Reverse Prayer)',          sub: 'Wrist extensors, forearm flexors - 5 breaths' },
           { id: 'ucd_fistflex',  label: 'Assisted Fist Flexion',                   sub: 'Wrist flexors, forearm extensors - 5 breaths' },
           { id: 'ucd_wall1',     label: 'Wall Stretch - Position 1',               sub: 'Pec major - arm at shoulder height, 5 breaths each side' },
-          { id: 'ucd_wall2',     label: 'Wall Stretch - Position 2',               sub: 'Pec minor - arm at 45° below shoulder, 5 breaths each side' },
+          { id: 'ucd_wall2',     label: 'Wall Stretch - Position 2',               sub: 'Pec minor - arm at 45? below shoulder, 5 breaths each side' },
           { id: 'ucd_glide',     label: 'Posterior Humeral Glide',                 sub: 'Left side only - 5 gentle reps after left wall stretch' },
           { id: 'ucd_crossbody', label: 'Cross-Body Rear Deltoid Stretch',         sub: 'Post-baseball release - 5 breaths both sides' },
           { id: 'ucd_leash',     label: 'Leash Shoulder Sequence',                 sub: 'Triceps then internal rotation - 5 breaths each position, both sides' },
@@ -1457,7 +1457,7 @@ const WORKOUTS = {
     ]
   },
 
-  // ── DAILY CORNERSTONE ────────────────────────────────────────────
+  // == DAILY CORNERSTONE ============================================
   CORNERSTONE: {
     label: 'Daily Cornerstone',
     sections: [
@@ -1476,8 +1476,8 @@ const WORKOUTS = {
         type: 'checklist',
         note: 'Positioning with breath - not stretching. No forcing.',
         items: [
-          { id: 'cs_b2_9090',   label: '90/90 Psoas Release',       sub: 'On back, hips & knees at 90° on aerobic step or couch - 10 slow diaphragmatic breaths' },
-          { id: 'cs_b2_hip_li', label: '90/90 Hip - Left Internal',  sub: 'Seated, left knee at 90°, forward fold if range allows - 5 breaths' },
+          { id: 'cs_b2_9090',   label: '90/90 Psoas Release',       sub: 'On back, hips & knees at 90? on aerobic step or couch - 10 slow diaphragmatic breaths' },
+          { id: 'cs_b2_hip_li', label: '90/90 Hip - Left Internal',  sub: 'Seated, left knee at 90?, forward fold if range allows - 5 breaths' },
           { id: 'cs_b2_hip_le', label: '90/90 Hip - Left External',  sub: '5 breaths' },
           { id: 'cs_b2_hip_ri', label: '90/90 Hip - Right Internal', sub: '5 breaths' },
           { id: 'cs_b2_hip_re', label: '90/90 Hip - Right External', sub: '5 breaths' },
@@ -1553,9 +1553,9 @@ const WORKOUTS = {
 
 };
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // STATE
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 let state = {
   selectedWorkout:   null,
   selectedCondition: null,
@@ -1575,9 +1575,9 @@ let roundCounters  = {};
 // Using per-set tracking to support deconfirm/reconfirm correctly
 let exerciseVolume = {};
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // VOLUME LOAD UTILITIES
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function calcLoad(exType, reps, weight) {
   const bw = state.bodyweight || 0;
   if (exType === 'bodyweight') return reps * bw;
@@ -1661,16 +1661,16 @@ function triggerBenchmarkFlash(blockEl) {
   setTimeout(() => { blockEl.style.background = ''; }, 800);
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // BODYWEIGHT
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function confirmBodyweight() {
   const val = parseFloat(document.getElementById('bodyweightInput').value);
   if (!val || val < 50 || val > 500) { showToast('Enter a valid bodyweight', 'error'); return; }
   state.bodyweight = val;
   localStorage.setItem('tmh_last_bodyweight', val);
   const btn = document.getElementById('bwConfirmBtn');
-  btn.textContent = '✓ ' + val + ' lbs';
+  btn.textContent = '? ' + val + ' lbs';
   btn.classList.add('confirmed');
   showToast('Bodyweight set: ' + val + ' lbs', 'success');
 }
@@ -1683,9 +1683,9 @@ function initBodyweight() {
   }
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // NAVIGATION
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -1727,9 +1727,9 @@ function goHome() {
   navTo('home');
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // SELECTORS
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function selectWorkout(el) {
   document.querySelectorAll('.workout-btn, .daily-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
@@ -1753,9 +1753,9 @@ function autoExpand(el) {
   el.style.height = el.scrollHeight + 'px';
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // START WORKOUT
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function startWorkout() {
   if (!state.selectedWorkout)   { showToast('Select a session type', 'error'); return; }
   if (!state.selectedCondition) { showToast('Select your condition', 'error'); return; }
@@ -1771,7 +1771,7 @@ function startWorkout() {
   const workout = WORKOUTS[state.selectedWorkout];
   document.getElementById('logTitle').textContent = workout.label.toUpperCase();
   document.getElementById('logConditionDisplay').textContent =
-    state.selectedCondition.split('-')[0].trim() + ' · ' + state.selectedSleep.split('(')[0].trim();
+    state.selectedCondition.split('-')[0].trim() + ' ? ' + state.selectedSleep.split('(')[0].trim();
 
   const now = new Date();
   document.getElementById('logDate').textContent =
@@ -1783,9 +1783,9 @@ function startWorkout() {
   autoSaveSession();
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // BUILD WORKOUT FORM
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function buildWorkoutForm(type) {
   const workout   = WORKOUTS[type];
   const container = document.getElementById('exerciseContainer');
@@ -1812,19 +1812,19 @@ function buildSectionHTML(section, workoutType) {
   let html = `
     <div class="section-header-bar" id="shdr_${section.id}">
       <div class="section-title">${section.title}</div>
-      ${showDoneBtn ? `<button class="done-btn" id="donebtn_${section.id}" onclick="completeSection('${section.id}')">Done ✓</button>` : ''}
+      ${showDoneBtn ? `<button class="done-btn" id="donebtn_${section.id}" onclick="completeSection('${section.id}')">Done ?</button>` : ''}
     </div>
   `;
 
   if (section.note)       html += `<div class="section-note">${section.note}</div>`;
-  if (section.autoregNote) html += `<div class="autoreg-note">⚠ ${section.autoregNote}</div>`;
-  if (section.bannerNote)  html += `<div class="pre-activation-banner">▶ ${section.bannerNote}</div>`;
+  if (section.autoregNote) html += `<div class="autoreg-note">? ${section.autoregNote}</div>`;
+  if (section.bannerNote)  html += `<div class="pre-activation-banner">? ${section.bannerNote}</div>`;
 
   if (section.type === 'rewarmup') {
     html += `
       <div class="skip-warmup-wrap">
         <button class="skip-warmup-btn" id="skipwarmup_${section.id}" onclick="skipWarmup('${section.id}')">
-          ↷ Skip - going straight from Cornerstone session
+          ? Skip - going straight from Cornerstone session
         </button>
       </div>
     `;
@@ -1885,7 +1885,7 @@ function buildChecklistHTML(section) {
           ${item.label}
           ${item.sub ? `<span class="checklist-sub">${item.sub}</span>` : ''}
         </div>
-        <div class="checklist-check">✓</div>
+        <div class="checklist-check">?</div>
       </div>
     `;
   });
@@ -1941,10 +1941,10 @@ function buildExerciseBlockHTML(ex, sectionId, roundNum, workoutType) {
 
   html += `
     <div class="exercise-note-toggle" onclick="toggleExNote('${exUid}')">
-      <span class="chevron">▶</span> Note
+      <span class="chevron">?</span> Note
     </div>
     <div class="exercise-note-area" id="exnote_${exUid}">
-      <textarea placeholder="Exercise note…" oninput="autoExpand(this)"></textarea>
+      <textarea placeholder="Exercise note?" oninput="autoExpand(this)"></textarea>
     </div>
   `;
 
@@ -1982,15 +1982,15 @@ function buildSetRowHTML(ex, exUid, baseExId, setNum) {
       data-confirmed="false">
       <div class="set-label" id="setlabel_${setKey}">S${setNum}</div>
       <div class="set-inputs">${inputs}</div>
-      <button class="confirm-btn" id="conf_${setKey}" onclick="confirmSet('${setKey}')">✓</button>
-      <button class="delete-set-btn" onclick="deleteSet('${setKey}')" title="Remove set">✕</button>
+      <button class="confirm-btn" id="conf_${setKey}" onclick="confirmSet('${setKey}')">?</button>
+      <button class="delete-set-btn" onclick="deleteSet('${setKey}')" title="Remove set">?</button>
     </div>
   `;
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // CONFIRM SET - deconfirm/reconfirm with accurate volume tracking
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function confirmSet(setKey) {
   const row = document.getElementById('setrow_' + setKey);
   const btn = document.getElementById('conf_' + setKey);
@@ -2005,7 +2005,7 @@ function confirmSet(setKey) {
     // DECONFIRM - subtract volume, re-enable inputs
     row.dataset.confirmed = 'false';
     btn.classList.remove('confirmed');
-    btn.textContent = '✓';
+    btn.textContent = '?';
     row.querySelectorAll('input').forEach(i => i.disabled = false);
     removeSetVolume(baseExId, setKey);
     autoSaveSession();
@@ -2034,7 +2034,7 @@ function confirmSet(setKey) {
 
   row.dataset.confirmed = 'true';
   btn.classList.add('confirmed');
-  btn.textContent = '✓';
+  btn.textContent = '?';
 
   if (exType !== 'duration' && reps > 0) {
     const vol = calcLoad(exType, reps, weight);
@@ -2050,9 +2050,9 @@ function confirmSet(setKey) {
   autoSaveSession();
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // DELETE SET
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function deleteSet(setKey) {
   const row = document.getElementById('setrow_' + setKey);
   if (!row) return;
@@ -2136,9 +2136,9 @@ function findExConfig(baseExId) {
   return null;
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // ADD SET
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function addSet(exUid, baseExId, exJson) {
   let ex;
   try { ex = JSON.parse(exJson.replace(/\\'/g,"'")); } catch(e) { return; }
@@ -2163,9 +2163,9 @@ function addSet(exUid, baseExId, exJson) {
   container.appendChild(row.firstElementChild);
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // ADD ROUND
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function addRound(sectionId) {
   roundCounters[sectionId] = (roundCounters[sectionId] || 1) + 1;
   const roundNum = roundCounters[sectionId];
@@ -2179,9 +2179,9 @@ function addRound(sectionId) {
   addBtn.parentNode.insertBefore(roundDiv.firstElementChild, addBtn);
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // FLAGS, TOGGLES, OPTIONAL
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function toggleFlag(exUid, type) {
   const btn = document.getElementById(`flag_${type}_${exUid}`);
   if (btn) btn.classList.toggle(type);
@@ -2199,9 +2199,9 @@ function toggleExNote(exUid) {
   if (area)   area.classList.toggle('open');
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // CHECKLIST
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function toggleChecklistItem(itemId, sectionId, total) {
   const item = document.getElementById('citem_' + itemId);
   if (!item) return;
@@ -2213,15 +2213,15 @@ function toggleChecklistItem(itemId, sectionId, total) {
   autoSaveSession();
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // COMPLETION
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function toggleCompletion(sectionId) {
   const block = document.getElementById('comp_' + sectionId);
   if (!block) return;
   block.classList.toggle('checked');
   if (block.classList.contains('checked')) {
-    document.getElementById('compcheck_' + sectionId).textContent = '✓';
+    document.getElementById('compcheck_' + sectionId).textContent = '?';
     completeSection(sectionId);
   } else {
     document.getElementById('compcheck_' + sectionId).textContent = '';
@@ -2231,19 +2231,19 @@ function toggleCompletion(sectionId) {
   autoSaveSession();
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // SKIP WARMUP
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function skipWarmup(sectionId) {
   const btn = document.getElementById('skipwarmup_' + sectionId);
-  if (btn) { btn.classList.add('skipped'); btn.textContent = '↷ Skipped - coming from Cornerstone'; }
+  if (btn) { btn.classList.add('skipped'); btn.textContent = '? Skipped - coming from Cornerstone'; }
   state.warmupSkipped = true;
   completeSection(sectionId);
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // SECTION COMPLETION & PROGRESS
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function completeSection(sectionId) {
   state.completedSections.add(sectionId);
   const hdr = document.getElementById('shdr_' + sectionId);
@@ -2314,9 +2314,9 @@ function updateSidebar() {
   });
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // AUTO-SAVE - writes session snapshot to localStorage periodically
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 const AUTO_SAVE_KEY = 'tmh_session_in_progress';
 
 function autoSaveSession() {
@@ -2359,8 +2359,8 @@ function checkForInterruptedSession() {
 
     const resume = confirm(
       `Interrupted session detected:\n\n` +
-      `${workout?.label || snap.selectedWorkout} · ${elapsed} min ago\n` +
-      `${sectDone}/${sectTotal} sections completed · ${snap.sessionVolume || 0} lbs volume\n\n` +
+      `${workout?.label || snap.selectedWorkout} ? ${elapsed} min ago\n` +
+      `${sectDone}/${sectTotal} sections completed ? ${snap.sessionVolume || 0} lbs volume\n\n` +
       `Resume this session?`
     );
 
@@ -2379,7 +2379,7 @@ function checkForInterruptedSession() {
     document.getElementById('logTitle').textContent =
       (workout?.label || snap.selectedWorkout).toUpperCase();
     document.getElementById('logConditionDisplay').textContent =
-      (snap.selectedCondition || '').split('-')[0].trim() + ' · ' +
+      (snap.selectedCondition || '').split('-')[0].trim() + ' ? ' +
       (snap.selectedSleep || '').split('(')[0].trim();
 
     const startDate = new Date(snap.sessionStart);
@@ -2400,14 +2400,14 @@ function checkForInterruptedSession() {
     updateProgress();
     showScreen('screen-log');
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    showToast('Session resumed ✓', 'success');
+    showToast('Session resumed ?', 'success');
 
   } catch(e) { clearAutoSave(); }
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // FINISH WORKOUT
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function finishWorkout() {
   try {
     const workout  = WORKOUTS[state.selectedWorkout];
@@ -2492,9 +2492,9 @@ function cancelWorkout() {
   }
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // SUMMARY
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function renderSummary(session) {
   document.getElementById('summarySubtitle').textContent =
     session.workoutType + ' // ' + session.date;
@@ -2509,7 +2509,7 @@ function renderSummary(session) {
 
   const isBenchmark = lastVol !== null && session.sessionVolume > lastVol;
   const volDiff     = lastVol !== null
-    ? (isBenchmark ? '▲ New benchmark' : (session.sessionVolume === lastVol ? '= Matched' : '▼ Below last'))
+    ? (isBenchmark ? '? New benchmark' : (session.sessionVolume === lastVol ? '= Matched' : '? Below last'))
     : '- First session';
 
   document.getElementById('summaryStats').innerHTML = `
@@ -2544,7 +2544,7 @@ function renderSummary(session) {
       <span class="summary-val">${session.sleep.split('(')[0].trim()}</span>
     </div>
     ${session.workoutType !== 'Daily Cornerstone'
-      ? `<div class="summary-row"><span class="summary-key">Warm-Up</span><span class="summary-val">${session.warmupSkipped ? 'Skipped ↷' : 'Completed'}</span></div>`
+      ? `<div class="summary-row"><span class="summary-key">Warm-Up</span><span class="summary-val">${session.warmupSkipped ? 'Skipped ?' : 'Completed'}</span></div>`
       : ''}
     <div class="summary-row">
       <span class="summary-key">Failures</span>
@@ -2561,9 +2561,9 @@ function renderSummary(session) {
   else               noteEl.style.display = 'none';
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // PERSISTENCE
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function saveLocally(session) {
   const history = getLocalHistory();
   history.unshift({ ...session, savedAt: new Date().toISOString() });
@@ -2593,12 +2593,12 @@ function renderHistory() {
         <div class="history-date">${s.date}</div>
       </div>
       <div class="history-meta">
-        ${s.condition ? s.condition.split('-')[0].trim() : ''} ·
-        ${s.sleep     ? s.sleep.split('(')[0].trim()     : ''} ·
-        ${s.duration  || 0} min ·
-        ${s.sectionsDone||'?'}/${s.totalSections||'?'} sections ·
+        ${s.condition ? s.condition.split('-')[0].trim() : ''} ?
+        ${s.sleep     ? s.sleep.split('(')[0].trim()     : ''} ?
+        ${s.duration  || 0} min ?
+        ${s.sectionsDone||'?'}/${s.totalSections||'?'} sections ?
         Vol: ${s.sessionVolume ? s.sessionVolume.toLocaleString() + ' lbs' : '-'}
-        ${s.warmupSkipped ? ' · warm-up skipped' : ''}
+        ${s.warmupSkipped ? ' ? warm-up skipped' : ''}
       </div>
       <div class="history-detail" id="hdetail_${i}">
         <div class="history-detail-row"><span>Bodyweight</span><span>${s.bodyweight||'-'} lbs</span></div>
@@ -2619,13 +2619,13 @@ function toggleHistoryDetail(i) {
   if (el) el.classList.toggle('open');
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // GOOGLE SHEETS
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 async function pushToSheets(session) {
   const url      = localStorage.getItem('tmh_sheet_url');
   const statusEl = document.getElementById('saveStatus');
-  if (!url) { if (statusEl) statusEl.textContent = 'Saved locally · Configure Sheets in Settings'; return; }
+  if (!url) { if (statusEl) statusEl.textContent = 'Saved locally ? Configure Sheets in Settings'; return; }
   try {
     await fetch(url, {
       method:  'POST',
@@ -2642,17 +2642,17 @@ async function pushToSheets(session) {
         exerciseLog: session.exerciseLog, note: session.note,
       }),
     });
-    if (statusEl) { statusEl.textContent = '✓ Saved to Google Sheets'; statusEl.style.color = 'var(--green)'; }
-    showToast('Saved to Sheets ✓', 'success');
+    if (statusEl) { statusEl.textContent = '? Saved to Google Sheets'; statusEl.style.color = 'var(--green)'; }
+    showToast('Saved to Sheets ?', 'success');
   } catch(err) {
-    if (statusEl) { statusEl.textContent = 'Saved locally · Sheets sync failed'; statusEl.style.color = 'var(--red)'; }
+    if (statusEl) { statusEl.textContent = 'Saved locally ? Sheets sync failed'; statusEl.style.color = 'var(--red)'; }
     showToast('Sheets sync failed - saved locally', 'error');
   }
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // SETTINGS
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 function initSettings() {
   const url   = localStorage.getItem('tmh_sheet_url');
   const dot   = document.getElementById('sheetStatusDot');
@@ -2673,7 +2673,7 @@ function saveSheetUrl() {
 async function testSheetConnection() {
   const url = localStorage.getItem('tmh_sheet_url');
   if (!url) { showToast('No URL configured', 'error'); return; }
-  try { await fetch(url, { method: 'GET', mode: 'no-cors' }); showToast('Connection OK ✓', 'success'); }
+  try { await fetch(url, { method: 'GET', mode: 'no-cors' }); showToast('Connection OK ?', 'success'); }
   catch(e) { showToast('Connection failed', 'error'); }
 }
 
@@ -2695,13 +2695,13 @@ function clearLocal() {
 
 function copyScript() {
   const code = document.getElementById('appsScriptCode').textContent;
-  navigator.clipboard.writeText(code).then(() => showToast('Apps Script code copied ✓', 'success'))
+  navigator.clipboard.writeText(code).then(() => showToast('Apps Script code copied ?', 'success'))
     .catch(() => showToast('Copy failed - select manually', 'error'));
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // TOAST
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 let toastTimer;
 function showToast(msg, type = '') {
   const el = document.getElementById('toast');
@@ -2711,9 +2711,9 @@ function showToast(msg, type = '') {
   toastTimer = setTimeout(() => { el.className = ''; }, 2800);
 }
 
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 // INIT
-// ══════════════════════════════════════════════════════════════════
+// ==================================================================
 document.addEventListener('DOMContentLoaded', () => {
   initBodyweight();
   initSettings();
