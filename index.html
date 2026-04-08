@@ -1108,7 +1108,7 @@ function doGet(e) {
 
 <script>
 // ══════════════════════════════════════════════════════════════════
-// WORKOUT CONFIGURATION — All program data lives here.
+// WORKOUT CONFIGURATION - All program data lives here.
 // To update the program, edit this object only.
 // ══════════════════════════════════════════════════════════════════
 
@@ -1133,7 +1133,7 @@ const WORKOUTS = {
         id: 'lower_corrective',
         title: 'Corrective Chain',
         type: 'performance',
-        note: 'Right knee / ankle / hip sequence — do not skip',
+        note: 'Right knee / ankle / hip sequence - do not skip',
         exercises: [
           { id: 'cc_toecircle', name: 'Toe Circles (Left Foot)',           type: 'duration',   goal: { mins: 0, secs: 40 } },
           { id: 'cc_anklecirc', name: 'Ankle Circles (Both Feet)',         type: 'duration',   goal: { mins: 0, secs: 40 } },
@@ -1150,7 +1150,7 @@ const WORKOUTS = {
         title: 'Boxing Footwork',
         type: 'completion',
         label: 'Boxing Footwork Complete',
-        note: '30 sec on / 5 sec rest — both stances, 5 patterns'
+        note: '30 sec on / 5 sec rest - both stances, 5 patterns'
       },
       {
         id: 'lower_kick',
@@ -1167,7 +1167,7 @@ const WORKOUTS = {
         id: 'lower_preact',
         title: 'Pre-Activation',
         type: 'performance',
-        note: 'Neural primer — 3 min — do not skip before loading',
+        note: 'Neural primer - 3 min - do not skip before loading',
         bannerNote: 'Complete this before the first loaded set. Confirm glute lockout on the heel-elevated squat before adding weight.',
         exercises: [
           { id: 'preact_glute', name: 'Glute Squeeze Holds',      type: 'bodyweight', goal: { reps: 10 } },
@@ -1180,7 +1180,7 @@ const WORKOUTS = {
         title: 'Primary Lifts',
         type: 'performance',
         hasRounds: true,
-        note: 'Up to 3 rounds — autoregulate on poor sleep or joint days',
+        note: 'Up to 3 rounds - autoregulate on poor sleep or joint days',
         exercises: [
           { id: 'squat',       name: 'Heel-Elevated Squats', type: 'strength', goal: { reps: 12, weight: 0  } },
           { id: 'goodmorning', name: 'Good Mornings',         type: 'strength', goal: { reps: 12, weight: 60 } },
@@ -1192,37 +1192,37 @@ const WORKOUTS = {
         id: 'lower_bostaff',
         title: 'Bo Staff',
         type: 'optional_checklist',
-        note: 'Optional — complete only when time and energy allow',
+        note: 'Optional - complete only when time and energy allow',
         items: [
-          { id: 'bs_2fwd', label: 'Two-Handed Figure Eight — Forward',    sub: '20 reps' },
-          { id: 'bs_2rev', label: 'Two-Handed Figure Eight — Reverse',    sub: '20 reps' },
-          { id: 'bs_rh',   label: 'One-Handed Figure Eight — Right Hand', sub: '20 forward + 20 reverse' },
-          { id: 'bs_lh',   label: 'One-Handed Figure Eight — Left Hand',  sub: '20 forward + 20 reverse — note any restriction' },
+          { id: 'bs_2fwd', label: 'Two-Handed Figure Eight - Forward',    sub: '20 reps' },
+          { id: 'bs_2rev', label: 'Two-Handed Figure Eight - Reverse',    sub: '20 reps' },
+          { id: 'bs_rh',   label: 'One-Handed Figure Eight - Right Hand', sub: '20 forward + 20 reverse' },
+          { id: 'bs_lh',   label: 'One-Handed Figure Eight - Left Hand',  sub: '20 forward + 20 reverse - note any restriction' },
         ]
       },
       {
         id: 'lower_cooldown',
         title: 'Cool-Down',
         type: 'checklist',
-        note: 'Lower body — standard breath protocol (5 breaths) unless noted',
+        note: 'Lower body - standard breath protocol (5 breaths) unless noted',
         items: [
           { id: 'lcd_sun',        label: 'Modified Sun Salutation',            sub: 'Static holds first pass, dynamic second' },
-          { id: 'lcd_warrior',    label: 'Warrior 2 — Both Sides',            sub: '5 breaths each side' },
+          { id: 'lcd_warrior',    label: 'Warrior 2 - Both Sides',            sub: '5 breaths each side' },
           { id: 'lcd_knees',      label: 'Both Knees to Chest',               sub: '5 breaths' },
-          { id: 'lcd_singleknee', label: 'Single Knee to Chest — Each Side',  sub: 'Hip flexor, glute, SI joint — 5 breaths' },
-          { id: 'lcd_crossrot',   label: 'Cross-Body Single Knee Rotation',   sub: 'Piriformis, IT band — 5 breaths each side' },
-          { id: 'lcd_plough',     label: 'Plough Pose',                       sub: 'FLAGGED — discontinue if neck discomfort' },
+          { id: 'lcd_singleknee', label: 'Single Knee to Chest - Each Side',  sub: 'Hip flexor, glute, SI joint - 5 breaths' },
+          { id: 'lcd_crossrot',   label: 'Cross-Body Single Knee Rotation',   sub: 'Piriformis, IT band - 5 breaths each side' },
+          { id: 'lcd_plough',     label: 'Plough Pose',                       sub: 'FLAGGED - discontinue if neck discomfort' },
           { id: 'lcd_seatfwd',    label: 'Seated Forward Bend Progression',   sub: 'Hips → hands to knees → hands to ankles + tiger palms' },
           { id: 'lcd_widelegs',   label: 'Wide-Leg Forward Bend Sequence',    sub: 'Center + one-sided + oblique crunches' },
-          { id: 'lcd_butterfly',  label: 'Butterfly Stretch',                 sub: 'Inner groin, hip adductors — 5 breaths' },
-          { id: 'lcd_sptwist',    label: 'Seated Spinal Twist',               sub: 'Initiate from thoracic — 5 breaths each side' },
+          { id: 'lcd_butterfly',  label: 'Butterfly Stretch',                 sub: 'Inner groin, hip adductors - 5 breaths' },
+          { id: 'lcd_sptwist',    label: 'Seated Spinal Twist',               sub: 'Initiate from thoracic - 5 breaths each side' },
           { id: 'lcd_anklerot',   label: 'Manual Ankle Rotation',             sub: '8 each direction, each foot' },
-          { id: 'lcd_toesfwd',    label: 'Toes Forward — Forward Bend',       sub: 'Plantar flexors, calf, ankle' },
-          { id: 'lcd_toesflex',   label: 'Toes Flexed Back — Forward Bend',   sub: 'Dorsiflexors, shin, plantar fascia' },
-          { id: 'lcd_supinate',   label: 'Foot Supination Stretch with PNF',  sub: '5 sec resist → release deeper — each side' },
-          { id: 'lcd_pronate',    label: 'Foot Pronation Stretch with PNF',   sub: '5 sec resist → release deeper — each side' },
-          { id: 'lcd_mtp',        label: 'Manual MTP Joint Mobilization',     sub: '10 gentle reps — left big toe traction + ROM' },
-          { id: 'lcd_toesplay',   label: 'Toe Splay',                         sub: '10 reps each foot — spread and hold 5 sec' },
+          { id: 'lcd_toesfwd',    label: 'Toes Forward - Forward Bend',       sub: 'Plantar flexors, calf, ankle' },
+          { id: 'lcd_toesflex',   label: 'Toes Flexed Back - Forward Bend',   sub: 'Dorsiflexors, shin, plantar fascia' },
+          { id: 'lcd_supinate',   label: 'Foot Supination Stretch with PNF',  sub: '5 sec resist → release deeper - each side' },
+          { id: 'lcd_pronate',    label: 'Foot Pronation Stretch with PNF',   sub: '5 sec resist → release deeper - each side' },
+          { id: 'lcd_mtp',        label: 'Manual MTP Joint Mobilization',     sub: '10 gentle reps - left big toe traction + ROM' },
+          { id: 'lcd_toesplay',   label: 'Toe Splay',                         sub: '10 reps each foot - spread and hold 5 sec' },
           { id: 'lcd_flexhall',   label: 'Flexor Hallucis Isolation',         sub: '10 reps each movement, each foot' },
         ]
       },
@@ -1261,10 +1261,10 @@ const WORKOUTS = {
       },
       {
         id: 'core_bag',
-        title: 'Heavy Bag — Waist Power',
+        title: 'Heavy Bag - Waist Power',
         type: 'completion',
         label: 'Heavy Bag Circuit Complete',
-        note: 'Bow and horse stance pushes — waist torsion & breath only'
+        note: 'Bow and horse stance pushes - waist torsion & breath only'
       },
       {
         id: 'core_parallettes',
@@ -1303,34 +1303,34 @@ const WORKOUTS = {
         id: 'core_bostaff',
         title: 'Bo Staff',
         type: 'optional_checklist',
-        note: 'Optional — complete only when time and energy allow',
+        note: 'Optional - complete only when time and energy allow',
         items: [
-          { id: 'core_bs_2fwd', label: 'Two-Handed Figure Eight — Forward',    sub: '20 reps' },
-          { id: 'core_bs_2rev', label: 'Two-Handed Figure Eight — Reverse',    sub: '20 reps' },
-          { id: 'core_bs_rh',   label: 'One-Handed Figure Eight — Right Hand', sub: '20 forward + 20 reverse' },
-          { id: 'core_bs_lh',   label: 'One-Handed Figure Eight — Left Hand',  sub: '20 forward + 20 reverse' },
+          { id: 'core_bs_2fwd', label: 'Two-Handed Figure Eight - Forward',    sub: '20 reps' },
+          { id: 'core_bs_2rev', label: 'Two-Handed Figure Eight - Reverse',    sub: '20 reps' },
+          { id: 'core_bs_rh',   label: 'One-Handed Figure Eight - Right Hand', sub: '20 forward + 20 reverse' },
+          { id: 'core_bs_lh',   label: 'One-Handed Figure Eight - Left Hand',  sub: '20 forward + 20 reverse' },
         ]
       },
       {
         id: 'core_cooldown',
         title: 'Cool-Down',
         type: 'checklist',
-        note: 'Whole-body maintenance — 3 breaths per hold unless noted',
+        note: 'Whole-body maintenance - 3 breaths per hold unless noted',
         items: [
-          { id: 'ccd_sun',       label: 'Modified Sun Salutation',         sub: 'Dynamic pass only — no static holds' },
+          { id: 'ccd_sun',       label: 'Modified Sun Salutation',         sub: 'Dynamic pass only - no static holds' },
           { id: 'ccd_knees',     label: 'Both Knees to Chest',             sub: '3 breaths' },
           { id: 'ccd_crossrot',  label: 'Cross-Body Single Knee Rotation', sub: '3 breaths each side' },
           { id: 'ccd_butterfly', label: 'Butterfly Stretch',               sub: '3 breaths' },
-          { id: 'ccd_wall1',     label: 'Wall Stretch — Position 1',       sub: 'Pec major — 3 breaths each side' },
-          { id: 'ccd_wall2',     label: 'Wall Stretch — Position 2',       sub: 'Pec minor — 3 breaths each side' },
-          { id: 'ccd_leash',     label: 'Leash Shoulder Sequence',         sub: 'Triceps then internal rotation — 3 breaths each position' },
+          { id: 'ccd_wall1',     label: 'Wall Stretch - Position 1',       sub: 'Pec major - 3 breaths each side' },
+          { id: 'ccd_wall2',     label: 'Wall Stretch - Position 2',       sub: 'Pec minor - 3 breaths each side' },
+          { id: 'ccd_leash',     label: 'Leash Shoulder Sequence',         sub: 'Triceps then internal rotation - 3 breaths each position' },
           { id: 'ccd_crossbody', label: 'Cross-Body Rear Deltoid Stretch', sub: '3 breaths each side' },
           { id: 'ccd_sptwist',   label: 'Seated Spinal Twist',             sub: '3 breaths each side' },
-          { id: 'ccd_wheel',     label: 'Yoga Wheel Thoracic Extension',   sub: 'Mid-thoracic T4–T6 — 2 holds × 5 breaths (full protocol)' },
+          { id: 'ccd_wheel',     label: 'Yoga Wheel Thoracic Extension',   sub: 'Mid-thoracic T4-T6 - 2 holds × 5 breaths (full protocol)' },
           { id: 'ccd_anklerot',  label: 'Manual Ankle Rotation',           sub: '5 each direction, each foot' },
           { id: 'ccd_toesplay',  label: 'Toe Splay',                       sub: '10 reps each foot' },
-          { id: 'ccd_prayer',    label: 'Prayer Stretch (Reverse Prayer)', sub: 'Wrist extensors — 3 breaths' },
-          { id: 'ccd_fistflex',  label: 'Assisted Fist Flexion',           sub: 'Wrist flexors — 3 breaths' },
+          { id: 'ccd_prayer',    label: 'Prayer Stretch (Reverse Prayer)', sub: 'Wrist extensors - 3 breaths' },
+          { id: 'ccd_fistflex',  label: 'Assisted Fist Flexion',           sub: 'Wrist flexors - 3 breaths' },
         ]
       },
     ]
@@ -1356,7 +1356,7 @@ const WORKOUTS = {
         id: 'upper_serratus',
         title: 'Serratus Activation',
         type: 'performance',
-        note: 'Before any pressing or rowing — scapular mechanics first',
+        note: 'Before any pressing or rowing - scapular mechanics first',
         exercises: [
           { id: 'serratus_slides', name: 'Serratus Wall Slides', type: 'bodyweight', goal: { reps: 10 } },
         ]
@@ -1365,20 +1365,20 @@ const WORKOUTS = {
         id: 'upper_walkingwarmup',
         title: 'Walking Warm-Up',
         type: 'checklist',
-        note: 'Head to toe in sequence — work while walking',
+        note: 'Head to toe in sequence - work while walking',
         items: [
-          { id: 'uww_neck',     label: 'Neck Circles',               sub: '5 circles each direction — gentle only' },
+          { id: 'uww_neck',     label: 'Neck Circles',               sub: '5 circles each direction - gentle only' },
           { id: 'uww_shldclk',  label: 'Shoulder Clocks',            sub: '20 forward, 20 backward' },
-          { id: 'uww_eagle',    label: 'Eagle Spread & Flap',        sub: '20 reps — mid-back initiates' },
+          { id: 'uww_eagle',    label: 'Eagle Spread & Flap',        sub: '20 reps - mid-back initiates' },
           { id: 'uww_wrist',    label: 'Wrist Rotations',            sub: '20 inside, 20 outside' },
           { id: 'uww_squeeze',  label: 'Hand Squeezes',              sub: '20 reps each hand' },
-          { id: 'uww_bicep',    label: 'Bicep Pumps',                sub: '40 reps — slow to brisk' },
+          { id: 'uww_bicep',    label: 'Bicep Pumps',                sub: '40 reps - slow to brisk' },
           { id: 'uww_tricep',   label: 'Tricep Extensions (T-shape)',sub: '20 reps both arms' },
-          { id: 'uww_torso',    label: 'Walking Torso Rotations',    sub: '20 each direction — thoracic initiates, hips forward' },
+          { id: 'uww_torso',    label: 'Walking Torso Rotations',    sub: '20 each direction - thoracic initiates, hips forward' },
           { id: 'uww_hip',      label: 'Hip Circles',                sub: '20 clockwise, 20 counterclockwise' },
-          { id: 'uww_heeltoe',  label: 'Heel-to-Toe Walk',           sub: '20 paces heels, 20 paces ball-of-foot — twice each' },
-          { id: 'uww_boneless', label: 'Boneless Dummy',             sub: '40 reps — arms genuinely limp' },
-          { id: 'uww_swimmer',  label: "Swimmer's Stretch",          sub: '40 reps — full backstroke arc' },
+          { id: 'uww_heeltoe',  label: 'Heel-to-Toe Walk',           sub: '20 paces heels, 20 paces ball-of-foot - twice each' },
+          { id: 'uww_boneless', label: 'Boneless Dummy',             sub: '40 reps - arms genuinely limp' },
+          { id: 'uww_swimmer',  label: "Swimmer's Stretch",          sub: '40 reps - full backstroke arc' },
         ]
       },
       {
@@ -1386,29 +1386,29 @@ const WORKOUTS = {
         title: 'Hand Blocks',
         type: 'completion',
         label: 'Hand Blocks Complete',
-        note: '20 reps / 4 sets — alternating leads'
+        note: '20 reps / 4 sets - alternating leads'
       },
       {
         id: 'upper_boxing',
         title: 'Boxing Combinations',
         type: 'completion',
         label: 'Boxing Combinations Complete',
-        note: '20 reps each side — form first, then loose & snappy'
+        note: '20 reps each side - form first, then loose & snappy'
       },
       {
         id: 'upper_lifting',
         title: 'Primary Lifting',
         type: 'performance',
         hasRounds: true,
-        note: 'Rest up to 2 min between supersets — up to 3 rounds',
+        note: 'Rest up to 2 min between supersets - up to 3 rounds',
         exercises: [
           { id: 'hangrow', name: 'Hanging Rows (Parallettes)',       type: 'strength', goal: { reps: 10, weight: 0  } },
-          { id: 'rows',    name: 'Rows',                             type: 'strength', goal: { reps: 10, weight: 0  }, goalNote: 'Enter total load — barbell or dumbbell' },
+          { id: 'rows',    name: 'Rows',                             type: 'strength', goal: { reps: 10, weight: 0  }, goalNote: 'Enter total load - barbell or dumbbell' },
           { id: 'pushup',  name: 'Push-Ups (Parallettes)',           type: 'strength', goal: { reps: 15, weight: 0  } },
           { id: 'dbfly',   name: 'Dumbbell Flyes',                   type: 'strength', goal: { reps: 20, weight: 60 } },
           { id: 'traise',  name: 'Dumbbell T-Raises',                type: 'strength', goal: { reps: 12, weight: 60 } },
           { id: 'arnold',  name: 'Arnold Press',                     type: 'strength', goal: { reps: 20, weight: 60 } },
-          { id: 'curl',    name: 'Bicep Curls (Alt — reps per arm)', type: 'strength', goal: { reps: 6,  weight: 30 } },
+          { id: 'curl',    name: 'Bicep Curls (Alt - reps per arm)', type: 'strength', goal: { reps: 6,  weight: 30 } },
           { id: 'dips',    name: 'Parallettes Dips',                 type: 'strength', goal: { reps: 15, weight: 0  } },
           { id: 'triext',  name: 'Triceps Extensions',               type: 'strength', goal: { reps: 12, weight: 30 } },
         ]
@@ -1417,7 +1417,7 @@ const WORKOUTS = {
         id: 'upper_shoulder',
         title: 'Shoulder Stability',
         type: 'performance',
-        note: 'Post-lifting — internal rotation both sides',
+        note: 'Post-lifting - internal rotation both sides',
         autoregNote: 'Left shoulder anterior pain? Drop to 2.5 lbs on internal rotation. Pain persists? Bodyweight only.',
         exercises: [
           { id: 'introt',   name: 'Internal Shoulder Rotation', type: 'strength', goal: { reps: 20, weight: 15 } },
@@ -1429,29 +1429,29 @@ const WORKOUTS = {
         id: 'upper_bostaff',
         title: 'Bo Staff',
         type: 'optional_checklist',
-        note: 'Optional — complete only when time and energy allow',
+        note: 'Optional - complete only when time and energy allow',
         items: [
-          { id: 'upper_bs_2fwd', label: 'Two-Handed Figure Eight — Forward',    sub: '20 reps' },
-          { id: 'upper_bs_2rev', label: 'Two-Handed Figure Eight — Reverse',    sub: '20 reps' },
-          { id: 'upper_bs_rh',   label: 'One-Handed Figure Eight — Right Hand', sub: '20 forward + 20 reverse' },
-          { id: 'upper_bs_lh',   label: 'One-Handed Figure Eight — Left Hand',  sub: '20 forward + 20 reverse' },
+          { id: 'upper_bs_2fwd', label: 'Two-Handed Figure Eight - Forward',    sub: '20 reps' },
+          { id: 'upper_bs_2rev', label: 'Two-Handed Figure Eight - Reverse',    sub: '20 reps' },
+          { id: 'upper_bs_rh',   label: 'One-Handed Figure Eight - Right Hand', sub: '20 forward + 20 reverse' },
+          { id: 'upper_bs_lh',   label: 'One-Handed Figure Eight - Left Hand',  sub: '20 forward + 20 reverse' },
         ]
       },
       {
         id: 'upper_cooldown',
         title: 'Cool-Down',
         type: 'checklist',
-        note: 'Myofascial release first — then upper body stretching (5 breaths standard)',
+        note: 'Myofascial release first - then upper body stretching (5 breaths standard)',
         items: [
-          { id: 'ucd_pec',       label: 'Pectoral Release — Baseball Against Wall', sub: '45–60 sec sustained hold — left side first, then right' },
-          { id: 'ucd_rhomboid',  label: 'Rhomboid Release — Baseball Against Wall', sub: '60–90 sec per spot — sustained hold, not rolling' },
-          { id: 'ucd_prayer',    label: 'Prayer Stretch (Reverse Prayer)',          sub: 'Wrist extensors, forearm flexors — 5 breaths' },
-          { id: 'ucd_fistflex',  label: 'Assisted Fist Flexion',                   sub: 'Wrist flexors, forearm extensors — 5 breaths' },
-          { id: 'ucd_wall1',     label: 'Wall Stretch — Position 1',               sub: 'Pec major — arm at shoulder height, 5 breaths each side' },
-          { id: 'ucd_wall2',     label: 'Wall Stretch — Position 2',               sub: 'Pec minor — arm at 45° below shoulder, 5 breaths each side' },
-          { id: 'ucd_glide',     label: 'Posterior Humeral Glide',                 sub: 'Left side only — 5 gentle reps after left wall stretch' },
-          { id: 'ucd_crossbody', label: 'Cross-Body Rear Deltoid Stretch',         sub: 'Post-baseball release — 5 breaths both sides' },
-          { id: 'ucd_leash',     label: 'Leash Shoulder Sequence',                 sub: 'Triceps then internal rotation — 5 breaths each position, both sides' },
+          { id: 'ucd_pec',       label: 'Pectoral Release - Baseball Against Wall', sub: '45-60 sec sustained hold - left side first, then right' },
+          { id: 'ucd_rhomboid',  label: 'Rhomboid Release - Baseball Against Wall', sub: '60-90 sec per spot - sustained hold, not rolling' },
+          { id: 'ucd_prayer',    label: 'Prayer Stretch (Reverse Prayer)',          sub: 'Wrist extensors, forearm flexors - 5 breaths' },
+          { id: 'ucd_fistflex',  label: 'Assisted Fist Flexion',                   sub: 'Wrist flexors, forearm extensors - 5 breaths' },
+          { id: 'ucd_wall1',     label: 'Wall Stretch - Position 1',               sub: 'Pec major - arm at shoulder height, 5 breaths each side' },
+          { id: 'ucd_wall2',     label: 'Wall Stretch - Position 2',               sub: 'Pec minor - arm at 45° below shoulder, 5 breaths each side' },
+          { id: 'ucd_glide',     label: 'Posterior Humeral Glide',                 sub: 'Left side only - 5 gentle reps after left wall stretch' },
+          { id: 'ucd_crossbody', label: 'Cross-Body Rear Deltoid Stretch',         sub: 'Post-baseball release - 5 breaths both sides' },
+          { id: 'ucd_leash',     label: 'Leash Shoulder Sequence',                 sub: 'Triceps then internal rotation - 5 breaths each position, both sides' },
         ]
       },
     ]
@@ -1463,29 +1463,29 @@ const WORKOUTS = {
     sections: [
       {
         id: 'cs_b1',
-        title: 'Block 1 — Nervous System',
+        title: 'Block 1 - Nervous System',
         type: 'checklist',
         note: 'Downregulate protective tension before any movement',
         items: [
-          { id: 'cs_b1_breath', label: 'Diaphragmatic Breathing', sub: 'Lying on back, knees bent — 10 slow breaths, full exhale, belly only' },
+          { id: 'cs_b1_breath', label: 'Diaphragmatic Breathing', sub: 'Lying on back, knees bent - 10 slow breaths, full exhale, belly only' },
         ]
       },
       {
         id: 'cs_b2',
-        title: 'Block 2 — Psoas & Hip Release',
+        title: 'Block 2 - Psoas & Hip Release',
         type: 'checklist',
-        note: 'Positioning with breath — not stretching. No forcing.',
+        note: 'Positioning with breath - not stretching. No forcing.',
         items: [
-          { id: 'cs_b2_9090',   label: '90/90 Psoas Release',       sub: 'On back, hips & knees at 90° on aerobic step or couch — 10 slow diaphragmatic breaths' },
-          { id: 'cs_b2_hip_li', label: '90/90 Hip — Left Internal',  sub: 'Seated, left knee at 90°, forward fold if range allows — 5 breaths' },
-          { id: 'cs_b2_hip_le', label: '90/90 Hip — Left External',  sub: '5 breaths' },
-          { id: 'cs_b2_hip_ri', label: '90/90 Hip — Right Internal', sub: '5 breaths' },
-          { id: 'cs_b2_hip_re', label: '90/90 Hip — Right External', sub: '5 breaths' },
+          { id: 'cs_b2_9090',   label: '90/90 Psoas Release',       sub: 'On back, hips & knees at 90° on aerobic step or couch - 10 slow diaphragmatic breaths' },
+          { id: 'cs_b2_hip_li', label: '90/90 Hip - Left Internal',  sub: 'Seated, left knee at 90°, forward fold if range allows - 5 breaths' },
+          { id: 'cs_b2_hip_le', label: '90/90 Hip - Left External',  sub: '5 breaths' },
+          { id: 'cs_b2_hip_ri', label: '90/90 Hip - Right Internal', sub: '5 breaths' },
+          { id: 'cs_b2_hip_re', label: '90/90 Hip - Right External', sub: '5 breaths' },
         ]
       },
       {
         id: 'cs_b3',
-        title: 'Block 3 — Glute Activation',
+        title: 'Block 3 - Glute Activation',
         type: 'performance',
         note: 'Full release between each rep is mandatory',
         exercises: [
@@ -1495,9 +1495,9 @@ const WORKOUTS = {
       },
       {
         id: 'cs_b4',
-        title: 'Block 4 — Foot & Ankle Activation',
+        title: 'Block 4 - Foot & Ankle Activation',
         type: 'performance',
-        note: 'Rebuilds proprioceptive map — right ankle restriction & left hallux rigidus',
+        note: 'Rebuilds proprioceptive map - right ankle restriction & left hallux rigidus',
         exercises: [
           { id: 'cs_toepoint', name: 'Toe Points (Both Feet)',               type: 'bodyweight', goal: { reps: 20 } },
           { id: 'cs_toeflex',  name: 'Toe Flexion (Both Feet)',              type: 'bodyweight', goal: { reps: 20 } },
@@ -1509,7 +1509,7 @@ const WORKOUTS = {
       },
       {
         id: 'cs_b5',
-        title: 'Block 5 — Thoracic Mobility',
+        title: 'Block 5 - Thoracic Mobility',
         type: 'performance',
         note: 'Compress to cat-cow only if short on time',
         exercises: [
@@ -1519,33 +1519,33 @@ const WORKOUTS = {
       },
       {
         id: 'cs_b6',
-        title: 'Block 6 — Integration Walk',
+        title: 'Block 6 - Integration Walk',
         type: 'checklist',
         note: 'Integrate floor work into locomotion. Raise core temperature.',
         items: [
-          { id: 'cs_b6_walk', label: '5-Minute Walk', sub: 'Unhurried, deliberate pace — feel the activation carry forward' },
+          { id: 'cs_b6_walk', label: '5-Minute Walk', sub: 'Unhurried, deliberate pace - feel the activation carry forward' },
         ]
       },
       {
         id: 'cs_b7',
-        title: 'Block 7 — Shoulder Maintenance',
+        title: 'Block 7 - Shoulder Maintenance',
         type: 'performance',
-        note: 'Daily low-dose neural signal — pattern restoration, not hypertrophy',
+        note: 'Daily low-dose neural signal - pattern restoration, not hypertrophy',
         autoregNote: 'Left shoulder anterior pain? Drop to 2.5 lbs immediately. Pain persists? Bodyweight only.',
         exercises: [
-          { id: 'cs_extrot_l', name: 'External Rotation — Left',  type: 'strength', goal: { reps: 15, weight: 5 } },
-          { id: 'cs_extrot_r', name: 'External Rotation — Right', type: 'strength', goal: { reps: 15, weight: 5 } },
+          { id: 'cs_extrot_l', name: 'External Rotation - Left',  type: 'strength', goal: { reps: 15, weight: 5 } },
+          { id: 'cs_extrot_r', name: 'External Rotation - Right', type: 'strength', goal: { reps: 15, weight: 5 } },
         ]
       },
       {
         id: 'cs_b8',
-        title: 'Block 8 — Martial Arts Neural Maintenance',
+        title: 'Block 8 - Martial Arts Neural Maintenance',
         type: 'checklist',
-        note: 'Keep volume minimal in early weeks. Pattern restoration — not conditioning.',
+        note: 'Keep volume minimal in early weeks. Pattern restoration - not conditioning.',
         items: [
-          { id: 'cs_b8_stance',  label: 'Stance Transitions',        sub: 'Horse, bow, fighting stance — 3 full cycles, slow and deliberate' },
-          { id: 'cs_b8_tech',    label: 'Single Technique Rehearsal', sub: '10 reps each side at 30% speed — rotate weekly: Wk1 Jab / Wk2 Front Kick / Wk3 Slip / Wk4 Rear Cross' },
-          { id: 'cs_b8_dantian', label: 'Dan Tian Breathing Walk',   sub: '2 minutes — slow walking with deliberate Dan Tian breath integration' },
+          { id: 'cs_b8_stance',  label: 'Stance Transitions',        sub: 'Horse, bow, fighting stance - 3 full cycles, slow and deliberate' },
+          { id: 'cs_b8_tech',    label: 'Single Technique Rehearsal', sub: '10 reps each side at 30% speed - rotate weekly: Wk1 Jab / Wk2 Front Kick / Wk3 Slip / Wk4 Rear Cross' },
+          { id: 'cs_b8_dantian', label: 'Dan Tian Breathing Walk',   sub: '2 minutes - slow walking with deliberate Dan Tian breath integration' },
         ]
       },
     ]
@@ -1629,7 +1629,7 @@ function recalcSessionVolume() {
   if (sesEl) {
     sesEl.textContent = state.sessionVolume > 0
       ? Math.round(state.sessionVolume).toLocaleString() + ' lbs'
-      : '— lbs';
+      : '- lbs';
   }
 }
 
@@ -1648,7 +1648,7 @@ function refreshVolumeDisplays(baseExId) {
         el.classList.remove('benchmark');
       }
     } else {
-      el.textContent = '—';
+      el.textContent = '-';
       el.classList.remove('benchmark');
     }
   });
@@ -1771,7 +1771,7 @@ function startWorkout() {
   const workout = WORKOUTS[state.selectedWorkout];
   document.getElementById('logTitle').textContent = workout.label.toUpperCase();
   document.getElementById('logConditionDisplay').textContent =
-    state.selectedCondition.split('—')[0].trim() + ' · ' + state.selectedSleep.split('(')[0].trim();
+    state.selectedCondition.split('-')[0].trim() + ' · ' + state.selectedSleep.split('(')[0].trim();
 
   const now = new Date();
   document.getElementById('logDate').textContent =
@@ -1824,7 +1824,7 @@ function buildSectionHTML(section, workoutType) {
     html += `
       <div class="skip-warmup-wrap">
         <button class="skip-warmup-btn" id="skipwarmup_${section.id}" onclick="skipWarmup('${section.id}')">
-          ↷ Skip — going straight from Cornerstone session
+          ↷ Skip - going straight from Cornerstone session
         </button>
       </div>
     `;
@@ -1907,7 +1907,7 @@ function buildExerciseBlockHTML(ex, sectionId, roundNum, workoutType) {
   const exUid    = roundNum > 0 ? `${ex.id}_r${roundNum}` : ex.id;
   const baseExId = ex.id;
   const lastVol  = (roundNum <= 1 && workoutType) ? getLastSessionVolume(workoutType, baseExId) : null;
-  const lastStr  = lastVol !== null ? Math.round(lastVol).toLocaleString() + ' lbs' : '—';
+  const lastStr  = lastVol !== null ? Math.round(lastVol).toLocaleString() + ' lbs' : '-';
 
   setCounters[exUid] = setCounters[exUid] || 1;
 
@@ -1929,7 +1929,7 @@ function buildExerciseBlockHTML(ex, sectionId, roundNum, workoutType) {
     html += `
       <div class="exercise-volume">
         <span class="vol-last">Last: ${lastStr}</span>
-        <span class="vol-current" id="vol_cur_${exUid}" data-baseid="${baseExId}" data-last="${lastVol !== null ? lastVol : ''}">—</span>
+        <span class="vol-current" id="vol_cur_${exUid}" data-baseid="${baseExId}" data-last="${lastVol !== null ? lastVol : ''}">-</span>
       </div>
     `;
   }
@@ -1989,7 +1989,7 @@ function buildSetRowHTML(ex, exUid, baseExId, setNum) {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// CONFIRM SET — deconfirm/reconfirm with accurate volume tracking
+// CONFIRM SET - deconfirm/reconfirm with accurate volume tracking
 // ══════════════════════════════════════════════════════════════════
 function confirmSet(setKey) {
   const row = document.getElementById('setrow_' + setKey);
@@ -2002,7 +2002,7 @@ function confirmSet(setKey) {
   const exUid       = row.dataset.exuid;
 
   if (isConfirmed) {
-    // DECONFIRM — subtract volume, re-enable inputs
+    // DECONFIRM - subtract volume, re-enable inputs
     row.dataset.confirmed = 'false';
     btn.classList.remove('confirmed');
     btn.textContent = '✓';
@@ -2012,7 +2012,7 @@ function confirmSet(setKey) {
     return;
   }
 
-  // CONFIRM — read values, calculate volume, lock inputs
+  // CONFIRM - read values, calculate volume, lock inputs
   let reps = 0, weight = 0;
 
   if (exType === 'strength') {
@@ -2066,7 +2066,7 @@ function deleteSet(setKey) {
   const allRows = Array.from(container.querySelectorAll('.set-row'));
 
   if (allRows.length === 1) {
-    // Last set — reset to one empty row rather than empty block
+    // Last set - reset to one empty row rather than empty block
     // Get exercise config to rebuild
     const exType = row.dataset.extype;
     // Subtract volume if confirmed
@@ -2236,7 +2236,7 @@ function toggleCompletion(sectionId) {
 // ══════════════════════════════════════════════════════════════════
 function skipWarmup(sectionId) {
   const btn = document.getElementById('skipwarmup_' + sectionId);
-  if (btn) { btn.classList.add('skipped'); btn.textContent = '↷ Skipped — coming from Cornerstone'; }
+  if (btn) { btn.classList.add('skipped'); btn.textContent = '↷ Skipped - coming from Cornerstone'; }
   state.warmupSkipped = true;
   completeSection(sectionId);
 }
@@ -2315,7 +2315,7 @@ function updateSidebar() {
 }
 
 // ══════════════════════════════════════════════════════════════════
-// AUTO-SAVE — writes session snapshot to localStorage periodically
+// AUTO-SAVE - writes session snapshot to localStorage periodically
 // ══════════════════════════════════════════════════════════════════
 const AUTO_SAVE_KEY = 'tmh_session_in_progress';
 
@@ -2334,7 +2334,7 @@ function autoSaveSession() {
       savedAt:           Date.now(),
     };
     localStorage.setItem(AUTO_SAVE_KEY, JSON.stringify(snapshot));
-  } catch(e) { /* storage full — fail silently */ }
+  } catch(e) { /* storage full - fail silently */ }
 }
 
 function clearAutoSave() {
@@ -2379,7 +2379,7 @@ function checkForInterruptedSession() {
     document.getElementById('logTitle').textContent =
       (workout?.label || snap.selectedWorkout).toUpperCase();
     document.getElementById('logConditionDisplay').textContent =
-      (snap.selectedCondition || '').split('—')[0].trim() + ' · ' +
+      (snap.selectedCondition || '').split('-')[0].trim() + ' · ' +
       (snap.selectedSleep || '').split('(')[0].trim();
 
     const startDate = new Date(snap.sessionStart);
@@ -2480,7 +2480,7 @@ function finishWorkout() {
     pushToSheets(session);
     document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   } catch(err) {
-    showToast('Save error — please try again', 'error');
+    showToast('Save error - please try again', 'error');
     console.error('finishWorkout error:', err);
   }
 }
@@ -2510,7 +2510,7 @@ function renderSummary(session) {
   const isBenchmark = lastVol !== null && session.sessionVolume > lastVol;
   const volDiff     = lastVol !== null
     ? (isBenchmark ? '▲ New benchmark' : (session.sessionVolume === lastVol ? '= Matched' : '▼ Below last'))
-    : '— First session';
+    : '- First session';
 
   document.getElementById('summaryStats').innerHTML = `
     <div class="summary-row">
@@ -2537,7 +2537,7 @@ function renderSummary(session) {
     ${session.hrAvg  ? `<div class="summary-row"><span class="summary-key">Avg HR Work</span><span class="summary-val">${session.hrAvg} bpm</span></div>` : ''}
     <div class="summary-row">
       <span class="summary-key">Condition</span>
-      <span class="summary-val">${session.condition.split('—')[0].trim()}</span>
+      <span class="summary-val">${session.condition.split('-')[0].trim()}</span>
     </div>
     <div class="summary-row">
       <span class="summary-key">Sleep</span>
@@ -2548,11 +2548,11 @@ function renderSummary(session) {
       : ''}
     <div class="summary-row">
       <span class="summary-key">Failures</span>
-      <span class="summary-val">${session.failureCount || '—'}</span>
+      <span class="summary-val">${session.failureCount || '-'}</span>
     </div>
     <div class="summary-row">
       <span class="summary-key">Skipped</span>
-      <span class="summary-val">${session.skipCount || '—'}</span>
+      <span class="summary-val">${session.skipCount || '-'}</span>
     </div>
   `;
 
@@ -2593,20 +2593,20 @@ function renderHistory() {
         <div class="history-date">${s.date}</div>
       </div>
       <div class="history-meta">
-        ${s.condition ? s.condition.split('—')[0].trim() : ''} ·
+        ${s.condition ? s.condition.split('-')[0].trim() : ''} ·
         ${s.sleep     ? s.sleep.split('(')[0].trim()     : ''} ·
         ${s.duration  || 0} min ·
         ${s.sectionsDone||'?'}/${s.totalSections||'?'} sections ·
-        Vol: ${s.sessionVolume ? s.sessionVolume.toLocaleString() + ' lbs' : '—'}
+        Vol: ${s.sessionVolume ? s.sessionVolume.toLocaleString() + ' lbs' : '-'}
         ${s.warmupSkipped ? ' · warm-up skipped' : ''}
       </div>
       <div class="history-detail" id="hdetail_${i}">
-        <div class="history-detail-row"><span>Bodyweight</span><span>${s.bodyweight||'—'} lbs</span></div>
-        <div class="history-detail-row"><span>Session Volume</span><span>${s.sessionVolume ? s.sessionVolume.toLocaleString() + ' lbs' : '—'}</span></div>
+        <div class="history-detail-row"><span>Bodyweight</span><span>${s.bodyweight||'-'} lbs</span></div>
+        <div class="history-detail-row"><span>Session Volume</span><span>${s.sessionVolume ? s.sessionVolume.toLocaleString() + ' lbs' : '-'}</span></div>
         ${s.hrPeak ? `<div class="history-detail-row"><span>Peak HR</span><span>${s.hrPeak} bpm</span></div>` : ''}
         ${s.hrAvg  ? `<div class="history-detail-row"><span>Avg HR Work</span><span>${s.hrAvg} bpm</span></div>` : ''}
-        <div class="history-detail-row"><span>Failures</span><span>${s.failureCount||'—'}</span></div>
-        <div class="history-detail-row"><span>Skipped</span><span>${s.skipCount||'—'}</span></div>
+        <div class="history-detail-row"><span>Failures</span><span>${s.failureCount||'-'}</span></div>
+        <div class="history-detail-row"><span>Skipped</span><span>${s.skipCount||'-'}</span></div>
         ${s.note ? `<div class="history-note">"${s.note}"</div>` : ''}
         ${s.exerciseLog ? `<pre style="font-size:10px;color:var(--text-dim);margin-top:10px;white-space:pre-wrap;line-height:1.6;">${s.exerciseLog}</pre>` : ''}
       </div>
@@ -2646,7 +2646,7 @@ async function pushToSheets(session) {
     showToast('Saved to Sheets ✓', 'success');
   } catch(err) {
     if (statusEl) { statusEl.textContent = 'Saved locally · Sheets sync failed'; statusEl.style.color = 'var(--red)'; }
-    showToast('Sheets sync failed — saved locally', 'error');
+    showToast('Sheets sync failed - saved locally', 'error');
   }
 }
 
@@ -2696,7 +2696,7 @@ function clearLocal() {
 function copyScript() {
   const code = document.getElementById('appsScriptCode').textContent;
   navigator.clipboard.writeText(code).then(() => showToast('Apps Script code copied ✓', 'success'))
-    .catch(() => showToast('Copy failed — select manually', 'error'));
+    .catch(() => showToast('Copy failed - select manually', 'error'));
 }
 
 // ══════════════════════════════════════════════════════════════════
