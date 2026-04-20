@@ -33,7 +33,7 @@
       --radius:      6px;
       --sidebar-w:   112px;
       --timer-h-collapsed: 42px;
-      --timer-h-expanded:  148px;
+      --timer-h-expanded:  196px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; min-height: 100vh; overscroll-behavior: none; }
@@ -76,6 +76,7 @@
     .timer-expanded-body {
       padding: 6px 14px 0;
       opacity: 0; transition: opacity 0.15s ease;
+      display: flex; flex-direction: column;
     }
     #timerBar.expanded .timer-expanded-body { opacity: 1; }
     .timer-phase-label {
@@ -96,7 +97,7 @@
     .timer-controls {
       display: grid; grid-template-columns: 1fr 1fr 1fr;
       gap: 0; border-top: 1px solid var(--border);
-      margin: 0 -14px;
+      margin: auto -14px 0;
     }
     .timer-ctrl-btn {
       padding: 14px 0; background: transparent; border: none;
@@ -1084,7 +1085,7 @@ function timerTick() {
 }
 
 function timerNextPhase() {
-  timerBeep(timerState.phase === 'work');
+  timerBeep(timerState.phase === 'work' ? 'rest' : 'work');
   if (timerState.phase === 'work') {
     if (timerState.restSecs > 0) {
       timerState.phase = 'rest';
@@ -1108,9 +1109,14 @@ function timerNextPhase() {
 }
 
 function timerComplete() {
-  timerBeep(false);
+  var wasRest = timerState.phase === 'rest';
+  timerBeep(wasRest ? 'work' : 'complete');
   timerStop();
-  showToast('Timer complete', 'success');
+  if (wasRest) {
+    showToast('Rest complete — go!', 'success');
+  } else {
+    showToast('Timer complete', 'success');
+  }
 }
 
 function timerStop() {
@@ -1226,18 +1232,28 @@ function stopElapsedTimer() {
   timerUpdateSidebar();
 }
 
-// Audio beep
-function timerBeep(isWork) {
+// Three-tone audio sequences
+function timerBeep(type) {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    var osc = ctx.createOscillator();
-    var gain = ctx.createGain();
-    osc.connect(gain); gain.connect(ctx.destination);
-    osc.frequency.value = isWork ? 880 : 440;
-    osc.type = 'sine';
-    gain.gain.setValueAtTime(0.4, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + 0.4);
+    var sequences = {
+      work:     [{ f:523, t:0 },    { f:659, t:0.12 }, { f:880, t:0.24 }], // ascending — C E A
+      rest:     [{ f:880, t:0 },    { f:659, t:0.12 }, { f:440, t:0.24 }], // descending — A E A
+      complete: [{ f:523, t:0 },    { f:523, t:0.12 }, { f:784, t:0.24 }]  // resolution — C C G
+    };
+    var seq = sequences[type] || sequences.complete;
+    seq.forEach(function(note) {
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = note.f;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0, ctx.currentTime + note.t);
+      gain.gain.linearRampToValueAtTime(0.4, ctx.currentTime + note.t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + note.t + 0.18);
+      osc.start(ctx.currentTime + note.t);
+      osc.stop(ctx.currentTime + note.t + 0.2);
+    });
   } catch(e){}
 }
 
@@ -1649,6 +1665,64 @@ function buildSetRowHTML(exId, exUid, baseExId, setNum, focus) {
 }
 
 // ══════════════════════════════════════════════════════════════
+// REST TIMER HELPERS
+// ══════════════════════════════════════════════════════════════
+function getSectionIdForExUid(exUid) {
+  // Walk the DOM to find which section block contains this exercise
+  var eblock = document.getElementById('eblock_' + exUid);
+  if (!eblock) return null;
+  var sblock = eblock.closest('[id^="sblock_"]');
+  if (!sblock) return null;
+  return sblock.id.replace('sblock_', '');
+}
+
+function getRestDuration(sectionId) {
+  var workout = WORKOUTS[state.selectedWorkout];
+  if (!workout) return 5;
+  var isPrimary = false;
+  for (var i = 0; i < workout.sections.length; i++) {
+    if (workout.sections[i].id === sectionId && workout.sections[i].isPrimaryLifts) {
+      isPrimary = true; break;
+    }
+  }
+  if (!isPrimary) return 5;
+  var focus = state.selectedFocus;
+  if (focus === 'STRENGTH')  return 120;
+  if (focus === 'ENDURANCE') return 30;
+  if (focus === 'ISOMETRIC') return 30;
+  return 120;
+}
+
+function startRestTimer(sectionId, exUid) {
+  var secs = getRestDuration(sectionId);
+  // Stop any existing timer cleanly without the complete beep
+  if (timerState.intervalId) { clearInterval(timerState.intervalId); timerState.intervalId = null; }
+  timerUnhighlightAll();
+  // Configure rest timer
+  timerState.workSecs    = secs;
+  timerState.restSecs    = 0;
+  timerState.intervals   = 1;
+  timerState.currentInterval = 1;
+  timerState.phase       = 'rest';
+  timerState.remaining   = secs;
+  timerState.active      = true;
+  timerState.paused      = false;
+  timerState.label       = secs === 5 ? '5s REST' : 'REST';
+  timerState.activeExerciseId = 'eblock_' + exUid;
+  var bar = document.getElementById('timerBar');
+  bar.classList.add('visible', 'has-active', 'expanded', 'phase-rest');
+  bar.classList.remove('phase-work');
+  timerHighlightExercise('eblock_' + exUid);
+  timerRender();
+  timerBeep('rest');
+  timerState.intervalId = setInterval(timerTick, 1000);
+  timerUpdateHeaderPos();
+  // Pause button reset
+  var pauseBtn = document.getElementById('timerPauseBtn');
+  if (pauseBtn) { pauseBtn.innerHTML = '&#9646;&#9646;'; pauseBtn.classList.remove('pause-active'); }
+}
+
+// ══════════════════════════════════════════════════════════════
 // CONFIRM SET
 // ══════════════════════════════════════════════════════════════
 function confirmSet(setKey) {
@@ -1692,6 +1766,9 @@ function confirmSet(setKey) {
       if (blockEl) { blockEl.style.transition = 'background 0.2s'; blockEl.style.background = 'rgba(255,179,0,0.07)'; setTimeout(function(){ blockEl.style.background = ''; }, 800); }
     }
   }
+  // Auto-start rest timer after every confirmed set
+  var sectionId = getSectionIdForExUid(exUid);
+  if (sectionId) startRestTimer(sectionId, exUid);
   autoSaveSession();
 }
 
