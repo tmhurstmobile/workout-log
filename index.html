@@ -33,7 +33,7 @@
       --radius:      6px;
       --sidebar-w:   112px;
       --timer-h-collapsed: 42px;
-      --timer-h-expanded:  196px;
+      --timer-h-expanded:  210px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body { background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', sans-serif; font-size: 16px; min-height: 100vh; overscroll-behavior: none; }
@@ -268,8 +268,8 @@
 
     /* ── SECTION BLOCKS ── */
     .section-block { margin-bottom: 8px; }
-    .section-header-bar { display: flex; align-items: center; justify-content: space-between; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; margin-bottom: 8px; scroll-margin-top: 70px; gap: 8px; }
-    .section-header-bar .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 3px; color: var(--text-mid); text-transform: uppercase; flex: 1; }
+    .section-header-bar { display: flex; align-items: center; justify-content: space-between; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 8px 12px; margin-bottom: 6px; scroll-margin-top: 70px; gap: 8px; }
+    .section-header-bar .section-title { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 2px; color: var(--text-mid); text-transform: uppercase; flex: 1; }
     .section-header-bar.active-section { border-color: var(--amber-dim); background: rgba(255,179,0,0.04); }
     .section-header-bar.active-section .section-title { color: var(--amber); }
     .section-header-bar.done-section { border-color: var(--border); background: var(--surface); opacity: 0.4; }
@@ -410,6 +410,17 @@
     .status-dot.disconnected { background: var(--red); }
     #saveStatus { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); text-align: center; padding: 8px 0 0; letter-spacing: 0.5px; }
     #appsScriptCode { display: block; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; font-size: 11px; color: var(--text-dim); white-space: pre; overflow-x: auto; line-height: 1.6; font-family: 'IBM Plex Mono', monospace; margin-bottom: 10px; }
+
+    /* ── CONDUCTOR ── */
+    .conductor-active-exercise { border-color: var(--amber) !important; box-shadow: 0 0 0 2px var(--amber-glow) !important; }
+    .conductor-next-exercise { border-color: var(--amber-dim) !important; opacity: 0.8; }
+    .exercise-name.conductor-rest { color: #4fc3f7 !important; }
+    .timer-countdown.phase-rest-color { color: #4fc3f7 !important; }
+    #timerBar.phase-rest .timer-countdown { color: #4fc3f7; }
+    #timerBar.phase-rest .timer-phase-label { color: #4fc3f7; }
+    .begin-session-btn { display: block; width: 100%; padding: 20px; border: 2px solid var(--amber); border-radius: var(--radius); background: var(--amber-bg); font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 4px; color: var(--amber); cursor: pointer; text-align: center; margin-bottom: 14px; transition: all 0.15s; }
+    .begin-session-btn:active { background: var(--amber); color: #0a0a0a; transform: scale(0.98); }
+    .begin-session-btn.running { background: var(--surface2); border-color: var(--border); color: var(--text-dim); font-size: 14px; letter-spacing: 1px; }
 
     /* ── TOAST ── */
     #toast { position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface3); border: 1px solid var(--border); border-radius: 20px; padding: 10px 20px; font-size: 13px; color: var(--text-mid); opacity: 0; transition: all 0.25s; pointer-events: none; white-space: nowrap; z-index: 999; }
@@ -560,6 +571,7 @@
     <textarea id="sessionNoteLog" placeholder="How did it go?" oninput="autoExpand(this)"></textarea>
   </div>
   <div id="saveStatus"></div>
+  <button class="begin-session-btn" id="beginSessionBtn" onclick="conductorBegin()">&#9654; Begin Session</button>
   <button class="btn btn-primary" style="margin-top:14px;" onclick="finishWorkout()">Finish &amp; Save</button>
   <button class="btn btn-secondary" style="margin-top:8px;" onclick="cancelWorkout()">Discard Session</button>
 </div>
@@ -776,14 +788,75 @@ var EXERCISE_GOALS = {
   rw_upper_extrot:{ name: 'External Rotation (BW)', type:'bodyweight',  strength:{reps:15}, endurance:{reps:15}, isometric:{reps:15} }
 };
 
-// TIMED CHECKLIST ITEMS (id -> duration in seconds)
+// TIMED CHECKLIST ITEMS (id -> duration in seconds) — used by conductor
 var TIMED_ITEMS = {
-  cs_b0_walk: 600, cs_b2_9090: 60,
-  cs_b2_hip_li:30, cs_b2_hip_le:30, cs_b2_hip_ri:30, cs_b2_hip_re:30,
-  cc_wallankle:30, cc_figfour:90, cc_hipflex:90,
-  lcd_warrior:30, ccd_wheel:60,
-  ucd_pec:52, ucd_rhomboid:75
+  // Cornerstone blocks
+  cs_b0_walk:600, cs_b1_breath:60,
+  cs_b2_9090:60, cs_b2_hip_li:40, cs_b2_hip_le:30, cs_b2_hip_ri:40, cs_b2_hip_re:30,
+  cs_b8_stance:120, cs_b8_defense:180, cs_b8_offense_hands:120,
+  cs_b8_offense_kicks:120, cs_b8_clinch:60, cs_b8_dantian:120,
+  // Upper body cool-down
+  ucd_pec:52, ucd_rhomboid:75, ucd_sleeper:45,
+  ucd_prayer:60, ucd_fistflex:60, ucd_wall1:60, ucd_wall2:60,
+  ucd_glide:60, ucd_crossbody:60, ucd_leash:60,
+  // Lower body cool-down
+  lcd_warrior:60, lcd_sun:300,
+  lcd_knees:60, lcd_singleknee:60, lcd_crossrot:60, lcd_plough:60,
+  lcd_seatfwd:300, lcd_widelegs:300,
+  lcd_butterfly:60, lcd_sptwist:60, lcd_anklerot:60,
+  lcd_toesfwd:60, lcd_toesflex:60, lcd_supinate:60, lcd_pronate:60,
+  lcd_mtp:60, lcd_toesplay:60, lcd_flexhall:60,
+  // Core cool-down
+  ccd_sun:300, ccd_knees:60, ccd_crossrot:60, ccd_butterfly:60,
+  ccd_wall1:60, ccd_wall2:60, ccd_leash:60, ccd_crossbody:60,
+  ccd_sptwist:60, ccd_wheel:60, ccd_anklerot:60, ccd_toesplay:60,
+  ccd_prayer:60, ccd_fistflex:60,
+  // Walking Warm-Up
+  uww_neck:30, uww_shldclk:30, uww_eagle:30, uww_wrist:30,
+  uww_squeeze:30, uww_bicep:30, uww_tricep:30, uww_torso:30,
+  uww_hip:30, uww_heeltoe:30, uww_boneless:30, uww_swimmer:30,
+  // Bo Staff — all workouts
+  bs_2fwd:45, bs_2rev:45, bs_rh:45, bs_lh:45,
+  core_bs_2fwd:45, core_bs_2rev:45, core_bs_rh:45, core_bs_lh:45,
+  upper_bs_2fwd:45, upper_bs_2rev:45, upper_bs_rh:45, upper_bs_lh:45
 };
+
+// REP TIER: seconds per rep × 20 max reps
+// slow=5s/rep(100s), standard=4s/rep(80s), fast=3s/rep(60s)
+var REP_TIER = {
+  // SLOW (5s) — holds, rotations, controlled
+  cs_glute_squeeze:5, cs_clamshell:5, cc_clam:5, preact_clam:5, rw_lower_clam:5,
+  cs_extrot_l:5, cs_extrot_r:5, extrot_l:5, extrot_r:5, introt:5,
+  cc_toecircle:5, cc_anklecirc:5, cc_wallankle:5,
+  bridge:5, lateralsquat:5, squat:5, goodmorning:5,
+  legraise:5, sideplank:5, hollow:5, bosu_ext:5,
+  hangrow:5, rows:5, pushup:5, traise:5, arnold:5, dips:5,
+  serratus_slides:5, serratus_close:5,
+  cs_bosu_ap:5, cs_bosu_ml:5,
+  // STANDARD (4s) — normal pace exercises
+  heelraise:4, preact_glute:4, preact_squat:4, cc_heelsquat:4, cc_bosu:4,
+  rw_lower_heelsquat:4, rw_lower_bosu:4, rw_upper_extrot:4,
+  kick_fwd:4, kick_back:4, kick_in:4, kick_out:4,
+  sidebend:4, highkick:4, bosu_crunch:4, russtwist:4,
+  curl:4, triext:4, dbfly:4, forecurl:4, foreflex:4,
+  cs_toepoint:4, cs_toeflex:4, cs_supinate:4, cs_pronate:4,
+  cs_catcow:4, cs_thorot:4,
+  // FAST (3s) — faster movements
+  rw_upper_shldclk:3, rw_upper_eagle:3, rw_upper_boneless:3,
+  rw_core_hipcir:3
+};
+
+function getRepWorkSecs(exId) {
+  var tier = REP_TIER[exId] || 4;
+  return tier * 20;
+}
+
+function getDurationWorkSecs(exId, focus) {
+  var goals = getFocusGoals(exId, focus);
+  if (!goals) return 60;
+  if (goals.secs && !goals.mins) return goals.secs; // isometric hold
+  return (goals.mins || 0) * 60 + (goals.secs || 0);
+}
 
 // ══════════════════════════════════════════════════════════════
 // WORKOUT STRUCTURE
@@ -974,19 +1047,19 @@ var WORKOUTS = {
   CORNERSTONE: {
     label: 'Daily Cornerstone', isResistance: false,
     sections: [
-      { id:'cs_b0', title:'Block 0 — Thermal Primer Walk', type:'checklist', note:'Warm tissue before floor work — min 10 min, target 15 min',
-        items:[{id:'cs_b0_walk',label:'Thermal Primer Walk',sub:'Easy pace — stop when hip and lower back feel noticeably looser. Min 10 min.'}]
+      { id:'cs_b0', title:'Block 0 — Thermal Primer Walk', type:'checklist', note:'Min 10 min — warm tissue before floor work',
+        items:[{id:'cs_b0_walk',label:'Thermal Primer Walk',sub:'Min 10 min easy pace',conductorSecs:600}]
       },
-      { id:'cs_b1', title:'Block 1 — Nervous System', type:'checklist', note:'Downregulate protective tension before any movement',
-        items:[{id:'cs_b1_breath',label:'Diaphragmatic Breathing',sub:'10 slow breaths — belly only, full exhale'}]
+      { id:'cs_b1', title:'Block 1 — Nervous System', type:'checklist', note:'Downregulate before any movement',
+        items:[{id:'cs_b1_breath',label:'Diaphragmatic Breathing',sub:'10 slow belly breaths',conductorSecs:60}]
       },
-      { id:'cs_b2', title:'Block 2 — Psoas & Hip Release', type:'checklist', note:'Positioning with breath — not stretching. No forcing.',
+      { id:'cs_b2', title:'Block 2 — Psoas & Hip Release', type:'checklist', note:'Breath positioning — no forcing',
         items:[
-          {id:'cs_b2_9090',label:'90/90 Psoas Release',sub:'Legs on step/couch — 10 slow diaphragmatic breaths'},
-          {id:'cs_b2_hip_li',label:'90/90 Hip — Left Internal',sub:'5 breaths + 10 active shin lifts (right rear leg)'},
-          {id:'cs_b2_hip_le',label:'90/90 Hip — Left External',sub:'5 breaths'},
-          {id:'cs_b2_hip_ri',label:'90/90 Hip — Right Internal',sub:'5 breaths + 10 active shin lifts (left rear leg)'},
-          {id:'cs_b2_hip_re',label:'90/90 Hip — Right External',sub:'5 breaths'}
+          {id:'cs_b2_9090',label:'90/90 Psoas Release',sub:'10 slow breaths',conductorSecs:60},
+          {id:'cs_b2_hip_li',label:'90/90 Hip — Left Internal',sub:'5 breaths + 10 shin lifts',conductorSecs:40},
+          {id:'cs_b2_hip_le',label:'90/90 Hip — Left External',sub:'5 breaths',conductorSecs:30},
+          {id:'cs_b2_hip_ri',label:'90/90 Hip — Right Internal',sub:'5 breaths + 10 shin lifts',conductorSecs:40},
+          {id:'cs_b2_hip_re',label:'90/90 Hip — Right External',sub:'5 breaths',conductorSecs:30}
         ]
       },
       { id:'cs_b3', title:'Block 3 — Glute Activation', type:'performance', note:'Full release between each rep is mandatory',
@@ -1002,14 +1075,14 @@ var WORKOUTS = {
         autoregNote:'Left shoulder anterior pain? Drop to 2.5 lbs immediately. Pain persists? Bodyweight only.',
         exercises:[{id:'cs_extrot_l'},{id:'cs_extrot_r'}]
       },
-      { id:'cs_b8', title:'Block 8 — Martial Arts Neural Maintenance', type:'checklist', note:'Keep volume minimal early. Pattern imprinting — not conditioning.',
+      { id:'cs_b8', title:'Block 8 — Martial Arts', type:'checklist', note:'Pattern imprinting — not conditioning',
         items:[
-          {id:'cs_b8_stance',label:'Stance & Footwork',sub:'2 min — 3 patterns, both leads, unhurried'},
-          {id:'cs_b8_defense',label:'Defensive Sequence',sub:'3 min — full hierarchy at 30% speed, both sides'},
-          {id:'cs_b8_offense_hands',label:'Offensive Hands',sub:'2 min — 3 combos, both leads, 5 reps each at 40%'},
-          {id:'cs_b8_offense_kicks',label:'Offensive Kicks',sub:'2 min — 2 kicks, both legs, 5 reps each at 40%'},
-          {id:'cs_b8_clinch',label:'Clinch & Knees',sub:'1 min — 3 clinch entries each lead, 5 knees each leg'},
-          {id:'cs_b8_dantian',label:'Dan Tian Breathing Walk',sub:'2 min — closes the Cornerstone'}
+          {id:'cs_b8_stance',label:'Stance & Footwork',sub:'2 min — 3 patterns both leads',conductorSecs:120},
+          {id:'cs_b8_defense',label:'Defensive Sequence',sub:'3 min — full hierarchy 30% speed',conductorSecs:180},
+          {id:'cs_b8_offense_hands',label:'Offensive Hands',sub:'2 min — 3 combos both leads',conductorSecs:120},
+          {id:'cs_b8_offense_kicks',label:'Offensive Kicks',sub:'2 min — 2 kicks both legs',conductorSecs:120},
+          {id:'cs_b8_clinch',label:'Clinch & Knees',sub:'1 min — 3 entries each lead',conductorSecs:60},
+          {id:'cs_b8_dantian',label:'Dan Tian Breathing Walk',sub:'2 min — closes Cornerstone',conductorSecs:120}
         ]
       }
     ]
@@ -1035,145 +1108,295 @@ var AUTO_SAVE_KEY = 'tmh_session_in_progress';
 var toastTimer;
 
 // ══════════════════════════════════════════════════════════════
-// TIMER STATE
+// CONDUCTOR STATE
 // ══════════════════════════════════════════════════════════════
+var conductor = {
+  running: false,
+  queue: [],        // flat ordered list of {type, id, domId, workSecs, sectionId, label}
+  index: -1,        // current position in queue
+  phase: 'work',    // 'work' | 'rest'
+  remaining: 0,
+  paused: false,
+  tickId: null,
+  elapsedTickId: null,
+  sessionStartTs: null
+};
+
 var timerState = {
+  // legacy compat — kept so existing timerStart calls from checklist buttons still work
   active: false, paused: false,
-  workSecs: 30, restSecs: 5, intervals: 10,
+  workSecs: 30, restSecs: 0, intervals: 1,
   currentInterval: 1, phase: 'work',
-  remaining: 30, elapsed: 0,
+  remaining: 30,
   intervalId: null, elapsedIntervalId: null,
   sessionStartTs: null,
-  activeExerciseId: null, // DOM id of associated block or checklist item
+  activeExerciseId: null,
   label: ''
 };
 
-function timerStart(config) {
-  timerStop();
-  timerState.workSecs    = config.work || 30;
-  timerState.restSecs    = config.rest || 0;
-  timerState.intervals   = config.intervals || 1;
-  timerState.currentInterval = 1;
-  timerState.phase       = 'work';
-  timerState.remaining   = timerState.workSecs;
-  timerState.active      = true;
-  timerState.paused      = false;
-  timerState.label       = config.label || '';
-  timerState.activeExerciseId = config.exerciseId || null;
-  var bar = document.getElementById('timerBar');
-  bar.classList.add('visible','has-active','expanded','phase-work');
-  bar.classList.remove('phase-rest');
-  timerHighlightExercise(timerState.activeExerciseId);
-  timerRender();
-  timerState.intervalId = setInterval(timerTick, 1000);
-  timerUpdateHeaderPos();
-  timerUpdateSidebar();
-  if (config.startBtn) {
-    var btn = document.getElementById(config.startBtn);
-    if (btn) btn.classList.add('running');
-  }
-}
+// ══════════════════════════════════════════════════════════════
+// CONDUCTOR ENGINE
+// ══════════════════════════════════════════════════════════════
 
-function timerTick() {
-  if (timerState.paused) return;
-  timerState.remaining--;
-  if (timerState.remaining <= 0) {
-    timerNextPhase();
-    return;
-  }
-  timerRender();
-}
-
-function timerNextPhase() {
-  timerBeep(timerState.phase === 'work' ? 'rest' : 'work');
-  if (timerState.phase === 'work') {
-    if (timerState.restSecs > 0) {
-      timerState.phase = 'rest';
-      timerState.remaining = timerState.restSecs;
-      var bar = document.getElementById('timerBar');
-      bar.classList.remove('phase-work'); bar.classList.add('phase-rest');
-    } else {
-      timerState.currentInterval++;
-      if (timerState.currentInterval > timerState.intervals) { timerComplete(); return; }
-      timerState.remaining = timerState.workSecs;
+// Build flat queue of all timed items from current workout
+function conductorBuildQueue() {
+  var workout = WORKOUTS[state.selectedWorkout];
+  var queue = [];
+  workout.sections.forEach(function(section) {
+    if (section.type === 'optional_checklist') return;
+    if (section.type === 'checklist' || section.type === 'rewarmup') {
+      (section.items || []).forEach(function(item) {
+        var secs = TIMED_ITEMS[item.id] || 60;
+        queue.push({ type:'checklist', id:item.id, domId:'citem_' + item.id,
+          workSecs:secs, sectionId:section.id, label:item.label });
+      });
+    } else if (section.type === 'completion' || section.type === 'autoreg_completion') {
+      var secs = section.timerConfig ? section.timerConfig.work * (section.timerConfig.intervals || 1) : 60;
+      queue.push({ type:'completion', id:section.id, domId:'comp_' + section.id,
+        workSecs:secs, sectionId:section.id, label:section.title });
+    } else if (section.type === 'performance') {
+      var rounds = roundCounters[section.id] || 1;
+      for (var r = 1; r <= rounds; r++) {
+        (section.exercises || []).forEach(function(ex) {
+          var exUid = r > 1 ? ex.id + '_r' + r : ex.id;
+          var def = EXERCISE_GOALS[ex.id];
+          if (!def) return;
+          var workSecs;
+          var isIso = state.selectedFocus === 'ISOMETRIC' && def.isometric && !def.retainDynamic && def.isometric.secs;
+          if (isIso) {
+            workSecs = def.isometric.secs;
+          } else if (def.type === 'duration') {
+            workSecs = getDurationWorkSecs(ex.id, state.selectedFocus);
+          } else {
+            workSecs = getRepWorkSecs(ex.id);
+          }
+          queue.push({ type:'exercise', id:exUid, baseId:ex.id,
+            domId:'eblock_' + exUid, workSecs:workSecs,
+            sectionId:section.id, label:getExerciseDisplayName(ex.id, state.selectedFocus) });
+        });
+      }
     }
-  } else {
-    timerState.currentInterval++;
-    if (timerState.currentInterval > timerState.intervals) { timerComplete(); return; }
-    timerState.phase = 'work';
-    timerState.remaining = timerState.workSecs;
-    var bar2 = document.getElementById('timerBar');
-    bar2.classList.remove('phase-rest'); bar2.classList.add('phase-work');
-  }
-  timerRender();
+  });
+  return queue;
 }
 
-function timerComplete() {
-  var wasRest = timerState.phase === 'rest';
-  timerBeep(wasRest ? 'work' : 'complete');
-  timerStop();
-  if (wasRest) {
-    showToast('Rest complete — go!', 'success');
+function conductorGetRestSecs(item) {
+  if (!item) return 5;
+  var workout = WORKOUTS[state.selectedWorkout];
+  var isPrimary = false;
+  for (var i = 0; i < workout.sections.length; i++) {
+    if (workout.sections[i].id === item.sectionId && workout.sections[i].isPrimaryLifts) {
+      isPrimary = true; break;
+    }
+  }
+  if (!isPrimary) return 5;
+  var f = state.selectedFocus;
+  if (f === 'STRENGTH')  return 120;
+  if (f === 'ENDURANCE') return 30;
+  if (f === 'ISOMETRIC') return 30;
+  return 120;
+}
+
+function conductorBegin() {
+  if (conductor.running) return;
+  conductor.queue = conductorBuildQueue();
+  if (!conductor.queue.length) { showToast('No exercises found', 'error'); return; }
+  conductor.index = -1;
+  conductor.running = true;
+  conductor.paused = false;
+  var btn = document.getElementById('beginSessionBtn');
+  if (btn) { btn.textContent = 'Session Running...'; btn.classList.add('running'); }
+  conductorAdvanceToNext();
+}
+
+function conductorAdvanceToNext() {
+  conductor.index++;
+  if (conductor.index >= conductor.queue.length) {
+    conductorComplete(); return;
+  }
+  var item = conductor.queue[conductor.index];
+  conductor.phase = 'work';
+  conductor.remaining = item.workSecs;
+  conductorHighlight(item, true);
+  // Mark next item
+  var nextItem = conductor.queue[conductor.index + 1];
+  if (nextItem) conductorHighlightNext(nextItem);
+  conductorRenderBar(item);
+  timerBeep('work');
+  // Auto-complete section tracking
+  conductorMarkSectionActive(item.sectionId);
+  if (conductor.tickId) clearInterval(conductor.tickId);
+  conductor.tickId = setInterval(conductorTick, 1000);
+}
+
+function conductorTick() {
+  if (conductor.paused) return;
+  conductor.remaining--;
+  if (conductor.remaining <= 0) {
+    conductorPhaseEnd(); return;
+  }
+  conductorRenderCountdown();
+}
+
+function conductorPhaseEnd() {
+  if (conductor.phase === 'work') {
+    var item = conductor.queue[conductor.index];
+    // Auto-complete the exercise/checklist item
+    conductorAutoComplete(item);
+    var restSecs = conductorGetRestSecs(item);
+    conductor.phase = 'rest';
+    conductor.remaining = restSecs;
+    timerBeep('rest');
+    conductorRenderBar(item);
   } else {
-    showToast('Timer complete', 'success');
+    // Rest done — advance to next exercise
+    timerBeep('work');
+    conductorAdvanceToNext();
   }
 }
 
-function timerStop() {
-  if (timerState.intervalId) { clearInterval(timerState.intervalId); timerState.intervalId = null; }
-  timerState.active = false; timerState.paused = false;
-  timerUnhighlightAll();
+function conductorAutoComplete(item) {
+  if (item.type === 'checklist') {
+    var el = document.getElementById(item.domId);
+    if (el && !el.classList.contains('checked')) {
+      // find section and total for progress
+      var sectionId = item.sectionId;
+      var workout = WORKOUTS[state.selectedWorkout];
+      var section = null;
+      for (var i = 0; i < workout.sections.length; i++) {
+        if (workout.sections[i].id === sectionId) { section = workout.sections[i]; break; }
+      }
+      var total = section ? (section.items || []).length : 1;
+      toggleChecklistItem(item.id, sectionId, total);
+    }
+  } else if (item.type === 'completion') {
+    var compEl = document.getElementById(item.domId);
+    if (compEl && !compEl.classList.contains('checked')) {
+      toggleCompletion(item.sectionId);
+    }
+  } else if (item.type === 'exercise') {
+    // Auto-confirm the first unconfirmed set of this exercise
+    var container = document.getElementById('sets_' + item.id);
+    if (container) {
+      var rows = container.querySelectorAll('.set-row');
+      for (var j = 0; j < rows.length; j++) {
+        if (rows[j].dataset.confirmed !== 'true') {
+          confirmSet(item.id + '_' + (j + 1));
+          break;
+        }
+      }
+    }
+  }
+}
+
+function conductorHighlight(item, isActive) {
+  conductorUnhighlightAll();
+  var el = document.getElementById(item.domId);
+  if (!el) return;
+  if (isActive) {
+    el.classList.add('conductor-active-exercise');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function conductorHighlightNext(item) {
+  var el = document.getElementById(item.domId);
+  if (el) el.classList.add('conductor-next-exercise');
+}
+
+function conductorUnhighlightAll() {
+  document.querySelectorAll('.conductor-active-exercise,.conductor-next-exercise').forEach(function(el){
+    el.classList.remove('conductor-active-exercise','conductor-next-exercise');
+  });
+}
+
+function conductorMarkSectionActive(sectionId) {
+  setActiveSection(sectionId);
+}
+
+function conductorRenderBar(item) {
   var bar = document.getElementById('timerBar');
-  bar.classList.remove('has-active','expanded','phase-work','phase-rest');
+  bar.classList.add('visible','has-active','expanded');
+  if (conductor.phase === 'work') {
+    bar.classList.add('phase-work'); bar.classList.remove('phase-rest');
+    document.getElementById('timerPhaseLabel').textContent = 'WORK';
+  } else {
+    bar.classList.add('phase-rest'); bar.classList.remove('phase-work');
+    document.getElementById('timerPhaseLabel').textContent = 'REST';
+  }
+  conductorRenderCountdown();
+  var pos = (conductor.index + 1) + ' / ' + conductor.queue.length;
+  document.getElementById('timerIntervalLabel').textContent = item.label + ' — ' + pos;
   timerUpdateHeaderPos();
-  timerUpdateSidebar();
-  document.querySelectorAll('.exercise-timer-btn.running, .timed-start-btn.running').forEach(function(b){ b.classList.remove('running'); });
 }
 
-function timerRender() {
-  var m = Math.floor(timerState.remaining / 60);
-  var s = timerState.remaining % 60;
+function conductorRenderCountdown() {
+  var r = conductor.remaining;
+  var m = Math.floor(r / 60); var s = r % 60;
   var str = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
   document.getElementById('timerCountdown').textContent = str;
   document.getElementById('timerActiveMini').textContent = str;
-  document.getElementById('timerPhaseLabel').textContent = timerState.phase.toUpperCase();
-  var intLabel = timerState.intervals > 1 ? (timerState.currentInterval + ' of ' + timerState.intervals) : (timerState.label || '');
-  document.getElementById('timerIntervalLabel').textContent = intLabel;
 }
 
+function conductorComplete() {
+  conductor.running = false;
+  clearInterval(conductor.tickId); conductor.tickId = null;
+  conductorUnhighlightAll();
+  timerBeep('complete');
+  var bar = document.getElementById('timerBar');
+  bar.classList.remove('has-active','expanded','phase-work','phase-rest');
+  timerUpdateHeaderPos();
+  showToast('Session complete — finish & save', 'success');
+  var btn = document.getElementById('beginSessionBtn');
+  if (btn) { btn.textContent = '✓ Session Complete'; btn.classList.add('running'); }
+}
+
+// Conductor controls (wired to timer bar buttons)
 function timerTogglePause() {
-  timerState.paused = !timerState.paused;
+  conductor.paused = !conductor.paused;
   var btn = document.getElementById('timerPauseBtn');
-  if (timerState.paused) { btn.innerHTML = '&#9654;'; btn.classList.add('pause-active'); }
+  if (conductor.paused) { btn.innerHTML = '&#9654;'; btn.classList.add('pause-active'); }
   else { btn.innerHTML = '&#9646;&#9646;'; btn.classList.remove('pause-active'); }
 }
 
 function timerRewind() {
-  if (!timerState.active) return;
-  var phaseMax = timerState.phase === 'work' ? timerState.workSecs : timerState.restSecs;
-  var elapsed = phaseMax - timerState.remaining;
-  if (elapsed <= 3 && timerState.currentInterval > 1) {
-    timerState.currentInterval--;
-    timerState.phase = 'work';
-    timerState.remaining = timerState.workSecs;
-    var bar = document.getElementById('timerBar');
-    bar.classList.remove('phase-rest'); bar.classList.add('phase-work');
+  if (!conductor.running) return;
+  var item = conductor.queue[conductor.index];
+  if (!item) return;
+  if (conductor.phase === 'rest') {
+    // Go back to work phase of current exercise
+    conductor.phase = 'work';
+    conductor.remaining = item.workSecs;
+    conductorRenderBar(item);
+    timerBeep('work');
   } else {
-    timerState.remaining = timerState.phase === 'work' ? timerState.workSecs : timerState.restSecs;
+    // Restart current work phase
+    var elapsed = item.workSecs - conductor.remaining;
+    if (elapsed <= 3 && conductor.index > 0) {
+      conductor.index--;
+      var prev = conductor.queue[conductor.index];
+      conductor.phase = 'work';
+      conductor.remaining = prev.workSecs;
+      conductorHighlight(prev, true);
+      conductorRenderBar(prev);
+      timerBeep('work');
+    } else {
+      conductor.remaining = item.workSecs;
+      conductorRenderCountdown();
+    }
   }
-  timerRender();
 }
 
 function timerAdvance() {
-  if (!timerState.active) return;
-  timerNextPhase();
+  if (!conductor.running) return;
+  clearInterval(conductor.tickId); conductor.tickId = null;
+  conductorPhaseEnd();
 }
 
 function timerToggleExpand() {
   var bar = document.getElementById('timerBar');
   bar.classList.toggle('expanded');
   timerUpdateHeaderPos();
-  timerUpdateSidebar();
 }
 
 function timerUpdateHeaderPos() {
@@ -1194,30 +1417,23 @@ function timerUpdateHeaderPos() {
   }
 }
 
-function timerUpdateSidebar() {
-  // sidebar top offset handled via CSS classes above
-}
-
 function timerHighlightExercise(id) {
-  timerUnhighlightAll();
+  conductorUnhighlightAll();
   if (!id) return;
   var el = document.getElementById(id);
-  if (el) el.classList.add('timer-active');
+  if (el) el.classList.add('conductor-active-exercise');
 }
 
-function timerUnhighlightAll() {
-  document.querySelectorAll('.timer-active').forEach(function(el){ el.classList.remove('timer-active'); });
-}
+function timerUnhighlightAll() { conductorUnhighlightAll(); }
 
 // Elapsed session timer
 function startElapsedTimer() {
-  timerState.sessionStartTs = Date.now();
+  conductor.sessionStartTs = Date.now();
   var bar = document.getElementById('timerBar');
   bar.classList.add('visible');
   timerUpdateHeaderPos();
-  timerUpdateSidebar();
-  timerState.elapsedIntervalId = setInterval(function(){
-    var secs = Math.floor((Date.now() - timerState.sessionStartTs) / 1000);
+  conductor.elapsedTickId = setInterval(function(){
+    var secs = Math.floor((Date.now() - conductor.sessionStartTs) / 1000);
     var m = Math.floor(secs / 60); var s = secs % 60;
     document.getElementById('timerElapsedDisplay').textContent = (m < 10?'0':'')+m+':'+(s<10?'0':'')+s;
     updateProgress();
@@ -1225,11 +1441,24 @@ function startElapsedTimer() {
 }
 
 function stopElapsedTimer() {
-  if (timerState.elapsedIntervalId) { clearInterval(timerState.elapsedIntervalId); timerState.elapsedIntervalId = null; }
+  if (conductor.elapsedTickId) { clearInterval(conductor.elapsedTickId); conductor.elapsedTickId = null; }
+  if (conductor.tickId) { clearInterval(conductor.tickId); conductor.tickId = null; }
+  conductor.running = false;
   var bar = document.getElementById('timerBar');
-  bar.classList.remove('visible');
+  bar.classList.remove('visible','has-active','expanded','phase-work','phase-rest');
   timerUpdateHeaderPos();
-  timerUpdateSidebar();
+}
+
+// Legacy timerStart — kept for any inline timer buttons still in HTML
+function timerStart(config) {
+  // Route through conductor advance if running, otherwise standalone
+  conductor.paused = false;
+}
+
+function timerStop() {
+  clearInterval(conductor.tickId); conductor.tickId = null;
+  conductor.running = false;
+  conductorUnhighlightAll();
 }
 
 // Three-tone audio sequences
@@ -1398,6 +1627,8 @@ function goHome() {
   var bw = state.bodyweight;
   state = { selectedWorkout:null, selectedFocus:null, selectedCondition:null, selectedSleep:null, bodyweight:bw, sessionStart:null, completedSections:new Set(), activeSectionId:null, warmupSkipped:false, sessionVolume:0, primaryLiftsSkipped:false, autoregToggles:{} };
   setCounters = {}; roundCounters = {}; exerciseVolume = {};
+  conductor.running = false; conductor.queue = []; conductor.index = -1; conductor.paused = false;
+  if (conductor.tickId) { clearInterval(conductor.tickId); conductor.tickId = null; }
   document.querySelectorAll('.workout-btn,.daily-btn').forEach(function(b){ b.classList.remove('selected'); });
   document.querySelectorAll('.focus-btn').forEach(function(b){ b.classList.remove('selected-strength','selected-endurance','selected-isometric'); });
   document.querySelectorAll('.cond-btn').forEach(function(b){ b.classList.remove('selected'); });
@@ -1470,6 +1701,7 @@ function startWorkout() {
   buildWorkoutForm(state.selectedWorkout);
   showScreen('screen-log');
   document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
+  conductor.sessionStartTs = Date.now();
   startElapsedTimer();
   autoSaveSession();
 }
@@ -1665,64 +1897,6 @@ function buildSetRowHTML(exId, exUid, baseExId, setNum, focus) {
 }
 
 // ══════════════════════════════════════════════════════════════
-// REST TIMER HELPERS
-// ══════════════════════════════════════════════════════════════
-function getSectionIdForExUid(exUid) {
-  // Walk the DOM to find which section block contains this exercise
-  var eblock = document.getElementById('eblock_' + exUid);
-  if (!eblock) return null;
-  var sblock = eblock.closest('[id^="sblock_"]');
-  if (!sblock) return null;
-  return sblock.id.replace('sblock_', '');
-}
-
-function getRestDuration(sectionId) {
-  var workout = WORKOUTS[state.selectedWorkout];
-  if (!workout) return 5;
-  var isPrimary = false;
-  for (var i = 0; i < workout.sections.length; i++) {
-    if (workout.sections[i].id === sectionId && workout.sections[i].isPrimaryLifts) {
-      isPrimary = true; break;
-    }
-  }
-  if (!isPrimary) return 5;
-  var focus = state.selectedFocus;
-  if (focus === 'STRENGTH')  return 120;
-  if (focus === 'ENDURANCE') return 30;
-  if (focus === 'ISOMETRIC') return 30;
-  return 120;
-}
-
-function startRestTimer(sectionId, exUid) {
-  var secs = getRestDuration(sectionId);
-  // Stop any existing timer cleanly without the complete beep
-  if (timerState.intervalId) { clearInterval(timerState.intervalId); timerState.intervalId = null; }
-  timerUnhighlightAll();
-  // Configure rest timer
-  timerState.workSecs    = secs;
-  timerState.restSecs    = 0;
-  timerState.intervals   = 1;
-  timerState.currentInterval = 1;
-  timerState.phase       = 'rest';
-  timerState.remaining   = secs;
-  timerState.active      = true;
-  timerState.paused      = false;
-  timerState.label       = secs === 5 ? '5s REST' : 'REST';
-  timerState.activeExerciseId = 'eblock_' + exUid;
-  var bar = document.getElementById('timerBar');
-  bar.classList.add('visible', 'has-active', 'expanded', 'phase-rest');
-  bar.classList.remove('phase-work');
-  timerHighlightExercise('eblock_' + exUid);
-  timerRender();
-  timerBeep('rest');
-  timerState.intervalId = setInterval(timerTick, 1000);
-  timerUpdateHeaderPos();
-  // Pause button reset
-  var pauseBtn = document.getElementById('timerPauseBtn');
-  if (pauseBtn) { pauseBtn.innerHTML = '&#9646;&#9646;'; pauseBtn.classList.remove('pause-active'); }
-}
-
-// ══════════════════════════════════════════════════════════════
 // CONFIRM SET
 // ══════════════════════════════════════════════════════════════
 function confirmSet(setKey) {
@@ -1766,9 +1940,6 @@ function confirmSet(setKey) {
       if (blockEl) { blockEl.style.transition = 'background 0.2s'; blockEl.style.background = 'rgba(255,179,0,0.07)'; setTimeout(function(){ blockEl.style.background = ''; }, 800); }
     }
   }
-  // Auto-start rest timer after every confirmed set
-  var sectionId = getSectionIdForExUid(exUid);
-  if (sectionId) startRestTimer(sectionId, exUid);
   autoSaveSession();
 }
 
@@ -1892,7 +2063,15 @@ function skipPrimaryLifts(sectionId) {
 // ══════════════════════════════════════════════════════════════
 // FLAGS AND TOGGLES
 // ══════════════════════════════════════════════════════════════
-function toggleFlag(exUid, type) { var btn = document.getElementById('flag_' + type + '_' + exUid); if (btn) btn.classList.toggle(type); }
+function toggleFlag(exUid, type) {
+  var btn = document.getElementById('flag_' + type + '_' + exUid);
+  if (btn) btn.classList.toggle(type);
+  // If skipping and conductor is running, advance past this exercise
+  if (type === 'skip' && btn && btn.classList.contains('skip') && conductor.running) {
+    clearInterval(conductor.tickId); conductor.tickId = null;
+    conductorPhaseEnd();
+  }
+}
 function toggleOptional(sectionId) { var c = document.getElementById('opt_' + sectionId); if (c) c.classList.toggle('open'); }
 function toggleExNote(exUid) {
   var toggle = document.querySelector('#eblock_' + exUid + ' .exercise-note-toggle');
@@ -1973,7 +2152,7 @@ function updateProgress() {
   sections.forEach(function(s){ if (state.completedSections.has(s.id)) done++; });
   document.getElementById('progressFill').style.width = (total > 0 ? (done/total)*100 : 0) + '%';
   document.getElementById('progressText').textContent = done + ' / ' + total + ' sections';
-  var elapsed = timerState.sessionStartTs ? Math.round((Date.now() - timerState.sessionStartTs) / 60000) : 0;
+  var elapsed = conductor.sessionStartTs ? Math.round((Date.now() - conductor.sessionStartTs) / 60000) : 0;
   document.getElementById('progressDuration').textContent = elapsed + ' min';
 }
 function buildSidebar(workout) {
@@ -2045,7 +2224,7 @@ function checkForInterruptedSession() {
     });
     updateSidebar(); updateProgress(); showScreen('screen-log');
     document.querySelectorAll('.nav-btn').forEach(function(b){ b.classList.remove('active'); });
-    timerState.sessionStartTs = snap.sessionStart;
+    conductor.sessionStartTs = snap.sessionStart;
     startElapsedTimer();
     showToast('Session resumed', 'success');
   } catch(e){ clearAutoSave(); }
@@ -2058,7 +2237,7 @@ function finishWorkout() {
   try {
     var workout = WORKOUTS[state.selectedWorkout];
     var sections = workout.sections.filter(function(s){ return s.type !== 'optional_checklist'; });
-    var duration = timerState.sessionStartTs ? Math.round((Date.now() - timerState.sessionStartTs) / 60000) : 0;
+    var duration = conductor.sessionStartTs ? Math.round((Date.now() - conductor.sessionStartTs) / 60000) : 0;
     var exerciseLog = '';
     document.querySelectorAll('.set-row').forEach(function(row){
       var exId = row.dataset.exid; var exType = row.dataset.extype; var setNum = row.dataset.setnum; var exUid = row.dataset.exuid;
