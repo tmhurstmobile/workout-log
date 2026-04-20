@@ -550,6 +550,7 @@
     </div>
     <div class="workout-date" id="logDate"></div>
   </div>
+  <button class="begin-session-btn" id="beginSessionBtn" onclick="conductorBegin()">&#9654; Begin Session</button>
   <div class="progress-wrap">
     <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
     <div class="progress-label"><span id="progressText">0 / 0 sections</span><span id="progressDuration">0 min</span></div>
@@ -571,7 +572,6 @@
     <textarea id="sessionNoteLog" placeholder="How did it go?" oninput="autoExpand(this)"></textarea>
   </div>
   <div id="saveStatus"></div>
-  <button class="begin-session-btn" id="beginSessionBtn" onclick="conductorBegin()">&#9654; Begin Session</button>
   <button class="btn btn-primary" style="margin-top:14px;" onclick="finishWorkout()">Finish &amp; Save</button>
   <button class="btn btn-secondary" style="margin-top:8px;" onclick="cancelWorkout()">Discard Session</button>
 </div>
@@ -1239,53 +1239,46 @@ function conductorTick() {
 }
 
 function conductorPhaseEnd() {
-  if (conductor.phase === 'work') {
-    var item = conductor.queue[conductor.index];
-    // Auto-complete the exercise/checklist item
-    conductorAutoComplete(item);
-    var restSecs = conductorGetRestSecs(item);
-    conductor.phase = 'rest';
-    conductor.remaining = restSecs;
-    timerBeep('rest');
-    conductorRenderBar(item);
-  } else {
-    // Rest done — advance to next exercise
-    timerBeep('work');
+  try {
+    if (conductor.phase === 'work') {
+      var item = conductor.queue[conductor.index];
+      conductorAutoComplete(item);
+      var restSecs = conductorGetRestSecs(item);
+      conductor.phase = 'rest';
+      conductor.remaining = restSecs;
+      timerBeep('rest');
+      conductorRenderBar(item);
+    } else {
+      conductorAdvanceToNext();
+    }
+  } catch(e) {
+    console.log('conductorPhaseEnd error:', e);
     conductorAdvanceToNext();
   }
 }
 
 function conductorAutoComplete(item) {
-  if (item.type === 'checklist') {
-    var el = document.getElementById(item.domId);
-    if (el && !el.classList.contains('checked')) {
-      // find section and total for progress
-      var sectionId = item.sectionId;
-      var workout = WORKOUTS[state.selectedWorkout];
-      var section = null;
-      for (var i = 0; i < workout.sections.length; i++) {
-        if (workout.sections[i].id === sectionId) { section = workout.sections[i]; break; }
-      }
-      var total = section ? (section.items || []).length : 1;
-      toggleChecklistItem(item.id, sectionId, total);
-    }
-  } else if (item.type === 'completion') {
-    var compEl = document.getElementById(item.domId);
-    if (compEl && !compEl.classList.contains('checked')) {
-      toggleCompletion(item.sectionId);
-    }
-  } else if (item.type === 'exercise') {
-    // Auto-confirm the first unconfirmed set of this exercise
-    var container = document.getElementById('sets_' + item.id);
-    if (container) {
-      var rows = container.querySelectorAll('.set-row');
-      for (var j = 0; j < rows.length; j++) {
-        if (rows[j].dataset.confirmed !== 'true') {
-          confirmSet(item.id + '_' + (j + 1));
-          break;
+  try {
+    if (item.type === 'checklist') {
+      var el = document.getElementById(item.domId);
+      if (el && !el.classList.contains('checked')) {
+        var workout = WORKOUTS[state.selectedWorkout];
+        var section = null;
+        for (var i = 0; i < workout.sections.length; i++) {
+          if (workout.sections[i].id === item.sectionId) { section = workout.sections[i]; break; }
         }
+        var total = section ? (section.items || []).length : 1;
+        toggleChecklistItem(item.id, item.sectionId, total);
+      }
+    } else if (item.type === 'completion') {
+      var compEl = document.getElementById(item.domId);
+      if (compEl && !compEl.classList.contains('checked')) {
+        toggleCompletion(item.sectionId);
       }
     }
+    // Exercise sets are NOT auto-confirmed — logged manually by Tim
+  } catch(e) {
+    console.log('conductorAutoComplete error:', e);
   }
 }
 
@@ -1763,12 +1756,7 @@ function buildSectionHTML(section, workoutType) {
     return html + '<div class="optional-block-wrap"><button class="optional-toggle-btn" onclick="toggleOptional(\'' + section.id + '\')"><span class="opt-indicator">+</span> Show / Hide Bo Staff</button><div class="optional-content" id="opt_' + section.id + '">' + buildChecklistHTML(section) + '</div></div>';
   }
   if (section.type === 'completion') {
-    var timerBtn = '';
-    if (section.timerConfig) {
-      var tc = section.timerConfig;
-      timerBtn = '<button class="exercise-timer-btn" id="timerbtn_' + section.id + '" onclick="timerStart({work:' + tc.work + ',rest:' + tc.rest + ',intervals:' + tc.intervals + ',label:\'' + tc.label + '\',exerciseId:\'comp_' + section.id + '\',startBtn:\'timerbtn_' + section.id + '\'})">&#9654; Start Timer</button>';
-    }
-    return html + timerBtn + '<div class="completion-block" id="comp_' + section.id + '" onclick="toggleCompletion(\'' + section.id + '\')"><div class="comp-label">' + section.label + '</div><div class="completion-check" id="compcheck_' + section.id + '"></div></div>';
+    return html + '<div class="completion-block" id="comp_' + section.id + '" onclick="toggleCompletion(\'' + section.id + '\')"><div class="comp-label">' + section.label + '</div><div class="completion-check" id="compcheck_' + section.id + '"></div></div>';
   }
   if (section.type === 'autoreg_completion') {
     var toggleKey2 = section.autoregKey;
@@ -1791,18 +1779,10 @@ function buildChecklistHTML(section) {
   var html = '<div class="checklist-block" id="clist_' + section.id + '"><div class="checklist-progress" id="cprog_' + section.id + '">0 / ' + total + '</div>';
   section.items.forEach(function(item) {
     var timedSecs = TIMED_ITEMS[item.id] || 0;
-    if (timedSecs > 0) {
-      var mins = Math.floor(timedSecs/60); var secs = timedSecs % 60;
-      var timeStr = mins > 0 ? mins + 'm ' + (secs>0?secs+'s':'') : secs+'s';
-      html += '<div class="checklist-item-timed" id="citem_' + item.id + '">' +
-        '<div class="checklist-label">' + item.label + (item.sub ? '<span class="checklist-sub">' + item.sub + '</span>' : '') + '</div>' +
-        '<button class="timed-start-btn" id="timerbtn_' + item.id + '" onclick="timerStart({work:' + timedSecs + ',rest:0,intervals:1,label:\'' + item.label.replace(/'/g,"\\'") + '\',exerciseId:\'citem_' + item.id + '\',startBtn:\'timerbtn_' + item.id + '\'});toggleChecklistItem(\'' + item.id + '\',\'' + section.id + '\',' + total + ')">' + timeStr + ' &#9654;</button>' +
-        '</div>';
-    } else {
-      html += '<div class="checklist-item" id="citem_' + item.id + '" onclick="toggleChecklistItem(\'' + item.id + '\',\'' + section.id + '\',' + total + ')">' +
-        '<div class="checklist-label">' + item.label + (item.sub ? '<span class="checklist-sub">' + item.sub + '</span>' : '') + '</div>' +
-        '<div class="checklist-check">&#10003;</div></div>';
-    }
+    var timeStr = timedSecs > 0 ? (Math.floor(timedSecs/60) > 0 ? Math.floor(timedSecs/60) + 'm' + (timedSecs%60>0?' '+timedSecs%60+'s':'') : timedSecs + 's') : '';
+    html += '<div class="checklist-item" id="citem_' + item.id + '" onclick="toggleChecklistItem(\'' + item.id + '\',\'' + section.id + '\',' + total + ')">' +
+      '<div class="checklist-label">' + item.label + (item.sub ? '<span class="checklist-sub">' + item.sub + '</span>' : '') + (timeStr ? '<span class="checklist-sub" style="color:var(--amber-dim);">&#9654; ' + timeStr + '</span>' : '') + '</div>' +
+      '<div class="checklist-check">&#10003;</div></div>';
   });
   return html + '</div>';
 }
@@ -1842,15 +1822,7 @@ function buildExerciseBlockHTML(exId, sectionId, roundNum, workoutType) {
       '<span class="vol-current" id="vol_cur_' + exUid + '" data-volbaseid="' + baseExId + '" data-last="' + (lastVol !== null ? lastVol : '') + '">--</span></div>';
   }
 
-  // Timer button for isometric holds and duration exercises
-  if (isIsoHold && goals && goals.secs) {
-    html += '<button class="exercise-timer-btn" id="timerbtn_' + exUid + '" onclick="timerStart({work:' + goals.secs + ',rest:30,intervals:1,label:\'' + displayName.replace(/'/g,"\\'") + '\',exerciseId:\'eblock_' + exUid + '\',startBtn:\'timerbtn_' + exUid + '\'})">&#9654; Start Hold (' + goals.secs + 's)</button>';
-  } else if (exType === 'duration' && goals) {
-    var durSecs = (goals.mins || 0) * 60 + (goals.secs || 0);
-    if (durSecs > 0) {
-      html += '<button class="exercise-timer-btn" id="timerbtn_' + exUid + '" onclick="timerStart({work:' + durSecs + ',rest:0,intervals:1,label:\'' + displayName.replace(/'/g,"\\'") + '\',exerciseId:\'eblock_' + exUid + '\',startBtn:\'timerbtn_' + exUid + '\'})">&#9654; Start Timer (' + (goals.mins>0?goals.mins+'m':'') + (goals.secs>0?goals.secs+'s':'') + ')</button>';
-    }
-  }
+  // Timer buttons removed — conductor drives all exercise timing
 
   html += '<div class="sets-container" id="sets_' + exUid + '">' + buildSetRowHTML(exId, exUid, baseExId, 1, focus) + '</div>';
   html += '<button class="add-set-btn" onclick="addSet(\'' + exUid + '\',\'' + baseExId + '\')"><span class="plus">+</span> Add Set</button>';
